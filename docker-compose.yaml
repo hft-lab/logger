@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_NAME: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5432:${POSTGRES_PORT}
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    restart: always
+    environment:
+      RABBITMQ_HOST: ${RABBIT_MQ_HOST}
+      RABBITMQ_USERNAME: ${RABBIT_MQ_USER}
+      RABBITMQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      RABBITMQ_PORT: ${RABBIT_MQ_PORT}
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  migrate:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.migrations"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 5 && python migrate.py'
+
+  insert_to_ping_logger:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_ping_logger'
+
+
+
+

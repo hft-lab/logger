@@ -1,0 +1,7 @@
+FROM python:3.9
+
+RUN mkdir workers
+WORKDIR ./workers
+COPY . .
+RUN pip install -r requirements.txt
+ENV PYTHONPATH="/:$PYTHONPATH"

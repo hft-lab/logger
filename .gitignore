@@ -1,0 +1,10 @@
+.idea/
+*.pyc
+venv
+.env
+__pycache__
+
+# migration logs
+migrations/Log.migrations
+/Log.migrations
+migrations/tests/Log.migrations
