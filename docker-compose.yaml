@@ -51,6 +51,19 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_ping_logger'
 
+  telegram:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.telegram'
+
 
 
 

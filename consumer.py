@@ -11,12 +11,14 @@ from aiohttp.web import Application
 
 from config import Config
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
+from tasks.event.sent_to_telegram import Telegram
 
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
 
 TASKS = {
-    'logger.event.insert_ping_logger': InsertToPingLogging
+    'logger.event.insert_ping_logger': InsertToPingLogging,
+    'logger.event.telegram': Telegram
 }
 
 
