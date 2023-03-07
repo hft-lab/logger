@@ -64,6 +64,54 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.telegram'
 
+  insert_balancing_reports:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balancing_reports'
+
+  insert_deals_reports:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_deals_reports'
+
+  insert_balance_check:
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balance_check'
+
+#  periodic:
+#    build:
+#      context: .
+#      dockerfile: "dockerfiles/Dockerfile.periodic"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - migrate
+
 
 
 

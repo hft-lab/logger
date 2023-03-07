@@ -10,7 +10,7 @@ class Config:
     Config class
     """
 
-    TELEGRAM_TOKEN = ''
+    TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
     POSTGRES = {
         'database': os.getenv('POSTGRES_NAME'),

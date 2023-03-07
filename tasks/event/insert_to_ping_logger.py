@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 from logging.config import dictConfig
 
 from config import Config
@@ -20,7 +19,7 @@ class InsertToPingLogging:
     async def run(self, payload: dict) -> None:
         """
         Get cursor and start insert func
-        :param payload: dict with NOT NULL params (
+        :param payload: dict with NOT NULL values (
             1. Server Name (Location)
             2. Exchange Name
             3. Status of ping to Exch. (Enum: success, no_connection)
@@ -39,8 +38,7 @@ class InsertToPingLogging:
     async def __insert_to_ping_logger(data: dict, cursor) -> None:
         """
         Insert data to ping_logger table
-        :param data: dict with NOT NULL keys: server_name, exchange_name, status_of_ping,
-                                              ts_of_request, ts_from_response, ts_received_response
+        :param data: dict with NOT NULL keys
         :param cursor: asyncpg cursor
         :return: None
         """

@@ -89,5 +89,4 @@ class Migration:
 
         old_migrations = [m[0] for m in old_migrations]
         intersection_migrations = list(set(new_migration) - set(old_migrations))
-
-        return intersection_migrations.sort()
+        return sorted(intersection_migrations)

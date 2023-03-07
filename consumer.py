@@ -10,7 +10,11 @@ from aio_pika import connect_robust
 from aiohttp.web import Application
 
 from config import Config
+from tasks.event.insert_to_balance_check import InsertToBalanceCheck
+from tasks.event.insert_to_balancing_reports import InsertToBalancingReports
+from tasks.event.insert_to_deals_reports import InsertToDealsReports
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
+
 from tasks.event.sent_to_telegram import Telegram
 
 dictConfig(Config.LOGGING)
@@ -18,7 +22,11 @@ logger = logging.getLogger(__name__)
 
 TASKS = {
     'logger.event.insert_ping_logger': InsertToPingLogging,
-    'logger.event.telegram': Telegram
+    'telegram.event.send_message': Telegram,
+
+    'logger.event.insert_deals_reports': InsertToDealsReports,
+    'logger.event.insert_balance_check': InsertToBalanceCheck,
+    'logger.event.insert_balancing_reports': InsertToBalancingReports
 }
 
 
