@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS deals_reports (
     long_side VARCHAR(64) NOT NULL,
     sell_ob_ask FLOAT NOT NULL,
     buy_ob_bid FLOAT NOT NULL,
-    deal_time BIGINT NOT NULL,
-    time_parser BIGINT NOT NULL,
-    time_choose BIGINT NOT NULL,
+    deal_time FLOAT NOT NULL,
+    time_parser FLOAT NOT NULL,
+    time_choose FLOAT NOT NULL,
     was_sent BOOLEAN default FALSE
 );

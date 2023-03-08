@@ -46,6 +46,7 @@ services:
       - .env
     depends_on:
       - migrate
+    restart: always
     command:
       - '/bin/sh'
       - '-c'
@@ -59,6 +60,7 @@ services:
       - .env
     depends_on:
       - migrate
+    restart: always
     command:
       - '/bin/sh'
       - '-c'
@@ -72,6 +74,7 @@ services:
       - .env
     depends_on:
       - migrate
+    restart: always
     command:
       - '/bin/sh'
       - '-c'
@@ -85,6 +88,7 @@ services:
       - .env
     depends_on:
       - migrate
+    restart: always
     command:
       - '/bin/sh'
       - '-c'
@@ -98,6 +102,7 @@ services:
       - .env
     depends_on:
       - migrate
+    restart: always
     command:
       - '/bin/sh'
       - '-c'
