@@ -71,7 +71,7 @@ class InsertToDealsReports:
                 fee_sell,
                 fee_buy,
                 long_side,
-                sell_ob_ask
+                sell_ob_ask,
                 buy_ob_bid,
                 deal_time,
                 time_parser,
