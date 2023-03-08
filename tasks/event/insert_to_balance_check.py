@@ -44,10 +44,9 @@ class InsertToBalanceCheck:
         :return: None
         """
         sql = f"""
-            insert into deals_reports(
+            insert into balance_check(
                 ts,
                 exchange_name,
-                side,
                 total_balance,
                 pos,
                 available_for_buy,
@@ -56,9 +55,8 @@ class InsertToBalanceCheck:
             values(
                 {data['timestamp']},
                 '{data['exchange_name']}',
-                '{data['side']}',
                 {data['total_balance']},
-                '{data['position']}',
+                {data['position']},
                 {data['available_for_buy']},
                 {data['available_for_sell']}
                 )         

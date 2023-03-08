@@ -44,7 +44,7 @@ class InsertToBalancingReports:
         :return: None
         """
         sql = f"""
-            insert into deals_reports(
+            insert into balancing_reports(
                 ts,
                 exchange_name,
                 side,
