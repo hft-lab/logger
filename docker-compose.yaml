@@ -6,7 +6,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     image: postgres
     restart: always
     environment:
@@ -20,7 +20,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     image: 'bitnami/rabbitmq:latest'
     restart: always
     environment:
@@ -36,7 +36,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.migrations"
@@ -54,7 +54,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -72,7 +72,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -90,7 +90,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -108,7 +108,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -126,7 +126,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m"
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -142,22 +142,16 @@ services:
 
   periodic:
     logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
+      driver: 'none'
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
     env_file:
       - .env
+    restart: always
     depends_on:
       - migrate
     command:
       - '/bin/sh'
       - '-c'
       - '/bin/sleep 10 && python periodic.py'
-
-
-
-
-
