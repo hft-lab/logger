@@ -15,7 +15,7 @@ from tasks.event.insert_to_balancing_reports import InsertToBalancingReports
 from tasks.event.insert_to_deals_reports import InsertToDealsReports
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
 
-from tasks.event.sent_to_telegram import Telegram
+from tasks.event.send_to_telegram import Telegram
 
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)

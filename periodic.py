@@ -7,7 +7,7 @@ from tasks.periodic.deals_reports import DealsReports
 
 TASKS = [
     BalanceCheck(),
-    # BalancingReports(),
+    BalancingReports(),
     DealsReports()
 ]
 
