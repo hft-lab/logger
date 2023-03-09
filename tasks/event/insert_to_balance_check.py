@@ -50,7 +50,10 @@ class InsertToBalanceCheck:
                 total_balance,
                 pos,
                 available_for_buy,
-                available_for_sell
+                available_for_sell,
+                ask,
+                bid,
+                symbol
                 )
             values(
                 {data['timestamp']},
@@ -58,7 +61,10 @@ class InsertToBalanceCheck:
                 {data['total_balance']},
                 {data['position']},
                 {data['available_for_buy']},
-                {data['available_for_sell']}
+                {data['available_for_sell']},
+                {data['ask']},
+                {data['bid']},
+                '{data['symbol']}'
                 )         
             """
         await cursor.execute(sql)

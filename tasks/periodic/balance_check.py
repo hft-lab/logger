@@ -23,20 +23,24 @@ class BalanceCheck(BasePeriodicTask):
             total_position = 0
             total_balance = 0
             index_price = []
+            no_need = []
 
             for row in self.data:
-                coin = row['symbol'].split('USD')[0].replace('-', '').replace('/', '')
+                if not row['exchange_name'] in no_need:
+                    coin = row['symbol'].split('USD')[0].replace('-', '').replace('/', '')
 
-                message += f"\nEXCHANGE: {row['exchange_name']}\n"
-                message += f"TOT BAL: {row['total_balance']} USD\n"
-                message += f"POS: {round(row['pos'], 4)} {coin}\n"
-                message += f"AVL BUY:  {round(row['available_for_buy'])}\n"
-                message += f"AVL SELL: {round(row['available_for_buy'])}\n"
-                index_price.append((row['bid'] + row['ask']) / 2)
-                total_position += row['pos']
-                total_balance += row['total_balance']
+                    message += f"   EXCHANGE: {row['exchange_name']}\n"
+                    message += f"TOT BAL: {row['total_balance']} USD\n"
+                    message += f"POS: {round(row['pos'], 4)} {coin}\n"
+                    message += f"AVL BUY:  {round(row['available_for_buy'])}\n"
+                    message += f"AVL SELL: {round(row['available_for_sell'])}\n"
+                    index_price.append((row['bid'] + row['ask']) / 2)
+                    total_position += row['pos']
+                    total_balance += row['total_balance']
 
-            message += f"\nTOTAL:\n"
+                    no_need.append(row['exchange_name'])
+
+            message += f"\n   TOTAL:\n"
             message += f"BALANCE: {round(total_balance)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
             min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)

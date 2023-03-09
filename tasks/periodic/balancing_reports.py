@@ -38,6 +38,8 @@ class BalancingReports(BasePeriodicTask):
             *
         from 
             balancing_reports
+        where
+            was_sent = False
         order by
             ts
         limit 
