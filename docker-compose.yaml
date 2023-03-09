@@ -3,6 +3,10 @@ version: '3.5'
 services:
 
   postgres:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     image: postgres
     restart: always
     environment:
@@ -13,6 +17,10 @@ services:
       - 5432:${POSTGRES_PORT}
 
   rabbitmq:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     image: 'bitnami/rabbitmq:latest'
     restart: always
     environment:
@@ -25,6 +33,10 @@ services:
       - 15672:15672
 
   migrate:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.migrations"
@@ -39,6 +51,10 @@ services:
       - '/bin/sleep 5 && python migrate.py'
 
   insert_to_ping_logger:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -53,6 +69,10 @@ services:
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_ping_logger'
 
   telegram:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -64,9 +84,13 @@ services:
     command:
       - '/bin/sh'
       - '-c'
-      - '/bin/sleep 10 && python consumer.py -q logger.event.telegram'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.send_message'
 
   insert_balancing_reports:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -81,6 +105,10 @@ services:
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balancing_reports'
 
   insert_deals_reports:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -95,6 +123,10 @@ services:
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_deals_reports'
 
   insert_balance_check:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
@@ -108,14 +140,23 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balance_check'
 
-#  periodic:
-#    build:
-#      context: .
-#      dockerfile: "dockerfiles/Dockerfile.periodic"
-#    env_file:
-#      - .env
-#    depends_on:
-#      - migrate
+  periodic:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python periodic.py'
+
 
 
 

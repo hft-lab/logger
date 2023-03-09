@@ -1,8 +1,0 @@
-FROM python:3.9
-RUN apt-get update && apt-get -y install cron vim
-RUN mkdir periodic
-WORKDIR ./periodic
-COPY . .
-RUN pip3 install -r requirements.txt
-RUN crontab -l | { cat; echo "*/10 * * * * * sleep 30; /usr/local/bin/python3 /producer/periodic.py"; } | crontab -
-CMD ["cron", "-f"]

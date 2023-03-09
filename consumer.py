@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 TASKS = {
     'logger.event.insert_ping_logger': InsertToPingLogging,
-    'telegram.event.send_message': Telegram,
+    'logger.event.send_message': Telegram,
 
     'logger.event.insert_deals_reports': InsertToDealsReports,
     'logger.event.insert_balance_check': InsertToBalanceCheck,
@@ -79,7 +79,7 @@ class Consumer:
             task = TASKS.get(message.routing_key)(self.app)
             await task.run(orjson.loads(message.body))
             logger.info(f"Success task {message.routing_key}")
-            if 'logger.events' in message.routing_key:
+            if 'logger.event' in message.routing_key:
                 await message.ack()
         except Exception as e:
             logger.info(f"Error {e} while serving task {message.routing_key}")

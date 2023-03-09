@@ -8,9 +8,10 @@ class BalancingReports(BasePeriodicTask):
     Periodic task for balancing reports
     """
 
-    EXCHANGE_NAME = 'logger.event.telegram'
-    ROUTING_KEY = 'logger.event'
-    QUEUE_NAME = 'logger.event.telegram'
+    ROUTING_KEY = 'logger.event.send_message'
+    EXCHANGE_NAME = 'logger.event'
+    QUEUE_NAME = 'logger.event.send_message'
+    CHAT_ID = -853372015
 
     async def prepare_message(self):
         pass

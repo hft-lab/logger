@@ -1,12 +1,13 @@
 import asyncio
+import traceback
 
-from tasks.periodic.BalanceCheck import BalanceCheck
-from tasks.periodic.BalancingReports import BalancingReports
-from tasks.periodic.DealsReports import DealsReports
+from tasks.periodic.balance_check import BalanceCheck
+from tasks.periodic.balancing_reports import BalancingReports
+from tasks.periodic.deals_reports import DealsReports
 
 TASKS = [
     BalanceCheck(),
-    BalancingReports(),
+    # BalancingReports(),
     DealsReports()
 ]
 
@@ -16,8 +17,10 @@ async def run() -> None:
     Just task runner
     :return:
     """
-    for task in TASKS:
-        await task.run()
+    while True:
+        for task in TASKS:
+            await task.run()
+        await asyncio.sleep(10)
 
 
 if __name__ == '__main__':
@@ -26,6 +29,6 @@ if __name__ == '__main__':
     try:
         loop.run_until_complete(run())
     except Exception as e:
-        print(e)
+        traceback.print_exc()
     finally:
         loop.close()

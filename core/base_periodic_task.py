@@ -17,6 +17,7 @@ class BasePeriodicTask:
     QUEUE_NAME = None
 
     def __init__(self):
+        self.cursor = None
         self.db = None
         self.mq = None
         self.data = None
@@ -30,18 +31,23 @@ class BasePeriodicTask:
         Send message to rabbitmq
         :return:
         """
+
         await self.connect_db()
         await self.connect_mq()
-        await self.get_data()
-        await self.prepare_message()
-        await self.send_to_rabbit()
+
+        async with self.db.acquire() as cursor:
+            self.cursor = cursor
+            await self.get_data()
+            await self.prepare_message()
+
+        await self.db.close()
 
     async def connect_db(self) -> None:
         self.db = await asyncpg.create_pool(**Config.POSTGRES)
 
     async def connect_mq(self) -> None:
         loop = asyncio.get_event_loop()
-        self.db = await connect_robust(self.rabbit_url, loop=loop)
+        self.mq = await connect_robust(self.rabbit_url, loop=loop)
 
     async def send_to_rabbit(self):
         await publish_message(
