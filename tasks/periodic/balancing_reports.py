@@ -14,10 +14,50 @@ class BalancingReports(BasePeriodicTask):
     CHAT_ID = -853372015
 
     async def prepare_message(self):
-        pass
+        if self.data:
+            coin = self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')
+            size_usd = abs(round(self.data['position_gap'] * self.data['price'], 2))
+            message = f"CREATED BALANCING ORDER\n"
+            message += f"SIZE, {coin}: {self.data['position_gap']}\n"
+            message += f"SIZE, USD: {size_usd}\n"
+            message += f"PRICE: {round(self.data['price'], 2)}\n"
+            message += f"SIDE: {self.data['side']}\n"
+            message += f"TAKER FEE: {self.data['taker_fee']}"
+            message += f"TIMESTAMP, SEC: {round(self.data['ts'])}"
+
+            self.data = {
+                'chat_id': self.CHAT_ID,
+                'msg': message
+            }
+            await self.send_to_rabbit()
+            await self.__update_one(self.data['ts'], self.data['exchange_name'])
 
     async def get_data(self):
-        pass
+        sql = """
+        select 
+            *
+        from 
+            balancing_reports
+        order by
+            ts
+        limit 
+            1
+        """
+        self.data = await self.cursor.fetchrow(sql)
+
+    async def __update_one(self, ts, exchange_name):
+        sql = f"""
+                  update 
+                      balancing_reports
+                  set 
+                      was_sent = True
+                  where
+                       was_sent = False and 
+                       ts = {ts} and 
+                       exchange_name = '{exchange_name}'
+                  """
+
+        await self.cursor.execute(sql)
 
 
 if __name__ == '__main__':

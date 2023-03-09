@@ -45,8 +45,6 @@ class DealsReports(BasePeriodicTask):
                 'msg': message
             }
             await self.send_to_rabbit()
-        else:
-            print('No data in DEALS REPORT')
 
     async def get_data(self):
             sql = """

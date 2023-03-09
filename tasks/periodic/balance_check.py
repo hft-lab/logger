@@ -25,10 +25,7 @@ class BalanceCheck(BasePeriodicTask):
             index_price = []
 
             for row in self.data:
-                if '-' in row['symbol']:
-                    coin = row['symbol'].split('-')[0]
-                else:
-                    coin = row['symbol'].replace('USDT', '').replace('BUSD', '').replace('USD', '')
+                coin = row['symbol'].split('USD')[0].replace('-', '').replace('/', '')
 
                 message += f"\nEXCHANGE: {row['exchange_name']}\n"
                 message += f"TOT BAL: {row['total_balance']} USD\n"
