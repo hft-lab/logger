@@ -22,7 +22,7 @@ class BalancingReports(BasePeriodicTask):
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
-            message += f"TAKER FEE: {self.data['taker_fee']}"
+            message += f"TAKER FEE: {self.data['taker_fee']}\n"
             message += f"TIMESTAMP, SEC: {round(self.data['ts'])}"
 
             self.data = {
