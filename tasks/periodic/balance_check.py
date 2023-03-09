@@ -18,7 +18,7 @@ class BalanceCheck(BasePeriodicTask):
 
     async def prepare_message(self):
         if self.data and (datetime.utcnow() - datetime.fromtimestamp(self.data[-1]['ts'] / 1000)).seconds / 60 >= 3:
-            message = f'BALANCES AND POSITIONS'
+            message = f'BALANCES AND POSITION\n'
 
             total_position = 0
             total_balance = 0
@@ -40,7 +40,7 @@ class BalanceCheck(BasePeriodicTask):
 
                     no_need.append(row['exchange_name'])
 
-            message += f"\n   TOTAL:\n"
+            message += f"   TOTAL:\n"
             message += f"BALANCE: {round(total_balance)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
             min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)
