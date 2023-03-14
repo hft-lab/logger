@@ -25,12 +25,13 @@ class BalancingReports(BasePeriodicTask):
             message += f"TAKER FEE: {self.data['taker_fee']}\n"
             message += f"TIMESTAMP, SEC: {round(self.data['ts'])}"
 
+            await self.__update_one(self.data['ts'], self.data['exchange_name'])
+
             self.data = {
                 'chat_id': self.CHAT_ID,
                 'msg': message
             }
             await self.send_to_rabbit()
-            await self.__update_one(self.data['ts'], self.data['exchange_name'])
 
     async def get_data(self):
         sql = """
