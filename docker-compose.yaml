@@ -28,7 +28,6 @@ services:
       - .env
     depends_on:
       - postgres
-      - rabbitmq
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:
