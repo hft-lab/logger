@@ -16,22 +16,6 @@ services:
     ports:
       - 5432:${POSTGRES_PORT}
 
-  rabbitmq:
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-    image: 'bitnami/rabbitmq:latest'
-    restart: always
-    environment:
-      RABBITMQ_HOST: ${RABBIT_MQ_HOST}
-      RABBITMQ_USERNAME: ${RABBIT_MQ_USER}
-      RABBITMQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
-      RABBITMQ_PORT: ${RABBIT_MQ_PORT}
-    ports:
-      - 5672:5672
-      - 15672:15672
-
   migrate:
     logging:
       driver: "json-file"
@@ -45,6 +29,8 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -63,6 +49,8 @@ services:
     depends_on:
       - migrate
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -81,6 +69,8 @@ services:
     depends_on:
       - migrate
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -99,6 +89,8 @@ services:
     depends_on:
       - migrate
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -117,6 +109,8 @@ services:
     depends_on:
       - migrate
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -135,6 +129,8 @@ services:
     depends_on:
       - migrate
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - '/bin/sh'
       - '-c'
@@ -149,6 +145,8 @@ services:
     env_file:
       - .env
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - migrate
     command:
