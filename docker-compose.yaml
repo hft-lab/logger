@@ -2,20 +2,6 @@ version: '3.5'
 
 services:
 
-  postgres:
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_NAME: ${POSTGRES_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - 5432:${POSTGRES_PORT}
-
   migrate:
     logging:
       driver: "json-file"
@@ -26,8 +12,6 @@ services:
       dockerfile: "dockerfiles/Dockerfile.migrations"
     env_file:
       - .env
-    depends_on:
-      - postgres
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:
@@ -137,7 +121,9 @@ services:
 
   periodic:
     logging:
-      driver: 'none'
+      driver: "json-file"
+      options:
+        max-size: "5m"
     build:
       context: .
       dockerfile: "dockerfiles/Dockerfile.workers"
