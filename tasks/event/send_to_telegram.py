@@ -9,13 +9,13 @@ from config import Config
 class Telegram:
 
     def __init__(self, app):
-        self.telegram_api_url = f'https://api.telegram.org/bot1965694823:AAEgOeKyXjTATWDbBbRGpivqh5i2IR6FzjY/sendMessage'
+        self.telegram_api_url = f'https://api.telegram.org/bot{Config.TELEGRAM_TOKEN}/sendMessage'
         self.headers = {'Content-Type': 'application/json'}
 
     async def run(self, payload: dict) -> None:
         message = {
-            'chat_id': payload['chat_id'],
-            'text': '<pre>' + payload['msg'] + '</pre>',
+            'chat_id': -807300930,
+            'text': '<pre>' + 'Test dev logger' + '</pre>',
             'parse_mode': 'HTML'
         }
 
