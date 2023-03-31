@@ -11,6 +11,7 @@ class Config:
     """
 
     TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+    TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
     POSTGRES = {
         'database': os.getenv('POSTGRES_NAME'),

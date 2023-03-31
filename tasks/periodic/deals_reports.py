@@ -2,6 +2,7 @@ import asyncio
 import traceback
 from datetime import datetime
 
+from config import Config
 from core.base_periodic_task import BasePeriodicTask
 
 
@@ -12,7 +13,7 @@ class DealsReports(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = -853372015
+    CHAT_ID = Config.TELEGRAM_CHAT_ID
 
     async def prepare_message(self):
         if self.data:

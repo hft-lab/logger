@@ -3,6 +3,7 @@ import time
 import traceback
 from datetime import datetime
 
+from config import Config
 from core.base_periodic_task import BasePeriodicTask
 
 
@@ -14,7 +15,7 @@ class BalanceCheck(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = -853372015
+    CHAT_ID = Config.TELEGRAM_CHAT_ID
 
     async def prepare_message(self):
         if self.data and (datetime.utcnow() - datetime.fromtimestamp(self.data[-1]['ts'] / 1000)).seconds / 60 >= 3:
