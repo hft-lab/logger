@@ -26,7 +26,9 @@ class InsertToBalancingReports:
             4. price
             5. taker_fee
             6. position_gap
-            7. size_usd)
+            7. size_usd
+            8. coin
+            9. env)
         :return: None
         """
 
@@ -51,7 +53,9 @@ class InsertToBalancingReports:
                 price,
                 taker_fee,
                 position_gap,
-                size_usd
+                size_usd,
+                env,
+                coin
                 )
             values(
                 {data['timestamp']},
@@ -60,7 +64,9 @@ class InsertToBalancingReports:
                 {data['price']},
                 {data['taker_fee']},
                 {data['position_gap']},
-                {data['size_usd']}
+                {data['size_usd']},
+                '{data['env']}',
+                '{data['coin']}'
                 )         
             """
         await cursor.execute(sql)

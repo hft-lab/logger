@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 from config import Config
 from core.base_periodic_task import BasePeriodicTask
@@ -16,15 +17,16 @@ class BalancingReports(BasePeriodicTask):
 
     async def prepare_message(self):
         if self.data:
-            coin = self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')
             size_usd = abs(round(self.data['position_gap'] * self.data['price'], 2))
             message = f"CREATED BALANCING ORDER\n"
-            message += f"SIZE, {coin}: {self.data['position_gap']}\n"
+            message += f"ENV: {self.data['env']}\n"
+            message += f"SIZE, {self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')}: " \
+                       f"{self.data['position_gap']}\n"
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
             message += f"TAKER FEE: {self.data['taker_fee']}\n"
-            message += f"TIMESTAMP, SEC: {round(self.data['ts'])}"
+            message += f"TIME (UTC): {datetime.datetime.fromtimestamp(round(self.data['ts'] / 100))}"
 
             await self.__update_one(self.data['ts'], self.data['exchange_name'])
 

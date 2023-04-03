@@ -26,7 +26,8 @@ class InsertToBalanceCheck:
             4. total_balance
             5. position
             6. available_for_buy
-            7. available_for_sell)
+            7. available_for_sell
+            8. env)
         :return: None
         """
 
@@ -53,7 +54,8 @@ class InsertToBalanceCheck:
                 available_for_sell,
                 ask,
                 bid,
-                symbol
+                symbol,
+                env
                 )
             values(
                 {data['timestamp']},
@@ -64,7 +66,8 @@ class InsertToBalanceCheck:
                 {data['available_for_sell']},
                 {data['ask']},
                 {data['bid']},
-                '{data['symbol']}'
+                '{data['symbol']}',
+                '{data['env']}'
                 )         
             """
         await cursor.execute(sql)

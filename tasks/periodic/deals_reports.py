@@ -18,6 +18,7 @@ class DealsReports(BasePeriodicTask):
     async def prepare_message(self):
         if self.data:
             message = f"TAKER ORDER EXECUTED\n{self.data['sell_exch']}- | {self.data['buy_exch']}+\n"
+            message += f"ENV: {self.data['env']}\n"
             message += f"CREATE ORDERS TIME, SEC: {round(self.data['deal_time'], 6)}\n"
             message += f"PARSE TIME, SEC: {round(self.data['time_parser'], 6)}\n"
             message += f"CHOOSE DEAL TIME, SEC: {round(self.data['time_choose'], 6)}\n"

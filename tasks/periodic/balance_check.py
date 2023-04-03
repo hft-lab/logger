@@ -31,6 +31,7 @@ class BalanceCheck(BasePeriodicTask):
                     coin = row['symbol'].split('USD')[0].replace('-', '').replace('/', '')
 
                     message += f"   EXCHANGE: {row['exchange_name']}\n"
+                    message += f"ENV: {row['env']}\n"
                     message += f"TOT BAL: {row['total_balance']} USD\n"
                     message += f"POS: {round(row['pos'], 4)} {coin}\n"
                     message += f"AVL BUY:  {round(row['available_for_buy'])}\n"
