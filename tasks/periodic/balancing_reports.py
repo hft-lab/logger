@@ -19,10 +19,10 @@ class BalancingReports(BasePeriodicTask):
         if self.data:
             size_usd = abs(round(self.data['position_gap'], 2))
             message = f"CREATED BALANCING ORDER\n"
-            message += f"EXCHANGES: {self.data['exchange_name']}"
+            message += f"EXCHANGES: {self.data['exchange_name']}\n"
             message += f"ENV: {self.data['env']}\n"
             message += f"SIZE, {self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')}: " \
-                       f"{self.data['price'] / self.data['position_gap']}\n"
+                       f"{self.data['price'] / size_usd}\n"
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
