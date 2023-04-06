@@ -17,16 +17,17 @@ class BalancingReports(BasePeriodicTask):
 
     async def prepare_message(self):
         if self.data:
-            size_usd = abs(round(self.data['position_gap'] * self.data['price'], 2))
+            size_usd = abs(round(self.data['position_gap'], 2))
             message = f"CREATED BALANCING ORDER\n"
+            message += f"EXCHANGES: {self.data['exchange_name']}"
             message += f"ENV: {self.data['env']}\n"
             message += f"SIZE, {self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')}: " \
-                       f"{self.data['position_gap']}\n"
+                       f"{self.data['price'] / self.data['position_gap']}\n"
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
             message += f"TAKER FEE: {self.data['taker_fee']}\n"
-            message += f"TIME (UTC): {datetime.datetime.fromtimestamp(round(self.data['ts'] / 100))}"
+            message += f"TIME (UTC): {datetime.datetime.fromtimestamp(round(self.data['ts'] / 1000))}"
 
             await self.__update_one(self.data['ts'], self.data['exchange_name'])
 
