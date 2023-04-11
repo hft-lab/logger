@@ -22,7 +22,7 @@ class BalancingReports(BasePeriodicTask):
             message += f"EXCHANGES: {self.data['exchange_name']}\n"
             message += f"ENV: {self.data['env']}\n"
             message += f"SIZE, {self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')}: " \
-                       f"{self.data['price'] / size_usd}\n"
+                       f"{round(size_usd / self.data['price'], 2)}\n"
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
