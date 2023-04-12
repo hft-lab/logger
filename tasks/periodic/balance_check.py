@@ -3,7 +3,6 @@ import time
 import traceback
 from datetime import datetime
 
-from config import Config
 from core.base_periodic_task import BasePeriodicTask
 
 
@@ -41,8 +40,12 @@ class BalanceCheck(BasePeriodicTask):
 
                     no_need.append(row['exchange_name'])
 
+            start_balance = await self.get_start_balance(no_need)
+
             message += f"   TOTAL:\n"
-            message += f"BALANCE: {round(total_balance)} USD\n"
+            message += f"START BALANCE: {round(start_balance, 2)} USD"
+            message += f"CHANGE OF BALANCE ABS: {abs(start_balance - total_balance)}"
+            message += f"TOTAL BALANCE: {round(total_balance, 2)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
             min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)
             message += f"LAST DEAL WAS {min_to_last_deal} MIN BEFORE\n"
@@ -55,6 +58,32 @@ class BalanceCheck(BasePeriodicTask):
             }
             await self.__update_all()
             await self.send_to_rabbit()
+
+    async def get_start_balance(self, no_need) -> float:
+        names = '('
+        for name in no_need:
+            names += "'" + name + "'" + ","
+
+        names = names[:-1] + ')'
+
+        sql = f"""
+            select 
+                sum(d.total_balance) as bal
+            from 
+                (select 
+                    distinct on (bc.exchange_name) bc.exchange_name, ts, total_balance
+                from 
+                    balance_check bc
+                where 
+                    bc.ts > extract(epoch from current_date) * 1000 and 
+                    bs.exchange_name in {names}
+                order by 
+                    exchange_name, ts
+                ) d  
+        """
+
+        res = await self.cursor.fetchrow(sql)
+        return res['bal']
 
     async def get_data(self) -> None:
         sql = """

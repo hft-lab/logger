@@ -2,7 +2,6 @@ import asyncio
 import traceback
 from datetime import datetime
 
-from config import Config
 from core.base_periodic_task import BasePeriodicTask
 
 
@@ -34,6 +33,7 @@ class DealsReports(BasePeriodicTask):
             message += f"PROFIT ABS, USD: {round(self.data['profit_usd'], 2)}\n"
             message += f"FEE SELL, %: {round(self.data['fee_sell'] * 100, 6)}\n"
             message += f"FEE BUY, %: {round(self.data['fee_buy'] * 100, 6)}\n"
+
             if self.data['buy_px'] == 0:
                 message += f"WARNING! {self.data['buy_exch']} CLIENT DOESN'T CREATE ORDERS"
             elif self.data['sell_px'] == 0:
