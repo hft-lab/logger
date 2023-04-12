@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 
-from config import Config
 from core.base_periodic_task import BasePeriodicTask
 
 
@@ -13,7 +12,6 @@ class BalancingReports(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = Config.TELEGRAM_CHAT_ID
 
     async def prepare_message(self):
         if self.data:
@@ -32,7 +30,8 @@ class BalancingReports(BasePeriodicTask):
             await self.__update_one(self.data['ts'], self.data['exchange_name'])
 
             self.data = {
-                'chat_id': self.CHAT_ID,
+                'chat_id': self.data['chat_id'],
+                'bot_token': self.data['bot_token'],
                 'msg': message
             }
             await self.send_to_rabbit()

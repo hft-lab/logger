@@ -55,7 +55,9 @@ class InsertToBalancingReports:
                 position_gap,
                 size_usd,
                 env,
-                coin
+                coin,
+                chat_id,
+                bot_token
                 )
             values(
                 {data['timestamp']},
@@ -66,7 +68,9 @@ class InsertToBalancingReports:
                 {data['position_gap']},
                 {data['size_usd']},
                 '{data['env']}',
-                '{data['coin']}'
+                '{data['coin']}',
+                {data['chat_id']},
+                '{data['bot_token']}',
                 )         
             """
         await cursor.execute(sql)

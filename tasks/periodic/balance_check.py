@@ -15,7 +15,6 @@ class BalanceCheck(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = Config.TELEGRAM_CHAT_ID
 
     async def prepare_message(self):
         if self.data and (datetime.utcnow() - datetime.fromtimestamp(self.data[-1]['ts'] / 1000)).seconds / 60 >= 3:
@@ -50,7 +49,8 @@ class BalanceCheck(BasePeriodicTask):
             message += f"INDEX PX: {round(sum(index_price) / len(index_price), 2)} USD\n"
 
             self.data = {
-                'chat_id': self.CHAT_ID,
+                'chat_id': row['chat_id'],
+                'bot_token': row['bot_token'],
                 'msg': message
             }
             await self.__update_all()

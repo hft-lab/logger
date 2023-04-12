@@ -77,7 +77,9 @@ class InsertToDealsReports:
                 deal_time,
                 time_parser,
                 time_choose,
-                env
+                env,
+                chat_id,
+                bot_token
                 )
             values(
                 {data['timestamp']},
@@ -99,7 +101,9 @@ class InsertToDealsReports:
                 {data['deal_time']},
                 {data['time_parser']},
                 {data['time_choose']},
-                '{data['env']}'
+                '{data['env']}',
+                {data['chat_id']},
+                '{data['bot_token']}'
                 )         
             """
         await cursor.execute(sql)

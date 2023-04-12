@@ -55,7 +55,9 @@ class InsertToBalanceCheck:
                 ask,
                 bid,
                 symbol,
-                env
+                env,
+                chat_id,
+                bot_token
                 )
             values(
                 {data['timestamp']},
@@ -67,7 +69,9 @@ class InsertToBalanceCheck:
                 {data['ask']},
                 {data['bid']},
                 '{data['symbol']}',
-                '{data['env']}'
+                '{data['env']}',
+                {data['chat_id']},
+                '{data['bot_token']}',
                 )         
             """
         await cursor.execute(sql)
