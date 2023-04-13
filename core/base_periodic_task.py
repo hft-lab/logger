@@ -33,7 +33,7 @@ class BasePeriodicTask:
         """
 
         await self.connect_db()
-        # await self.connect_mq()
+        await self.connect_mq()
 
         async with self.db.acquire() as cursor:
             self.cursor = cursor

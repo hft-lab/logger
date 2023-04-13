@@ -76,7 +76,7 @@ class BalanceCheck(BasePeriodicTask):
                     balance_check bc
                 where 
                     bc.ts > extract(epoch from current_date) * 1000 and 
-                    bs.exchange_name in {names}
+                    bc.exchange_name in {names}
                 order by 
                     exchange_name, ts
                 ) d  
