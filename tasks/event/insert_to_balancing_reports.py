@@ -70,7 +70,7 @@ class InsertToBalancingReports:
                 '{data['env']}',
                 '{data['coin']}',
                 {data['chat_id']},
-                '{data['bot_token']}',
+                '{data['bot_token']}'
                 )         
             """
         await cursor.execute(sql)

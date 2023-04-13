@@ -71,7 +71,7 @@ class InsertToBalanceCheck:
                 '{data['symbol']}',
                 '{data['env']}',
                 {data['chat_id']},
-                '{data['bot_token']}',
+                '{data['bot_token']}'
                 )         
             """
         await cursor.execute(sql)
