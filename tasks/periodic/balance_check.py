@@ -43,8 +43,8 @@ class BalanceCheck(BasePeriodicTask):
             start_balance = await self.get_start_balance(no_need)
 
             message += f"   TOTAL:\n"
-            message += f"START BALANCE: {round(start_balance, 2)} USD"
-            message += f"CHANGE OF BALANCE ABS: {abs(start_balance - total_balance)}"
+            message += f"START BALANCE: {round(start_balance, 2)} USD\n"
+            message += f"CHANGE OF BALANCE ABS: {abs(start_balance - total_balance)}\n"
             message += f"TOTAL BALANCE: {round(total_balance, 2)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
             min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)
