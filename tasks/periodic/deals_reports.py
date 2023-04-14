@@ -12,11 +12,11 @@ class DealsReports(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = -853372015
 
     async def prepare_message(self):
         if self.data:
             message = f"TAKER ORDER EXECUTED\n{self.data['sell_exch']}- | {self.data['buy_exch']}+\n"
+            message += f"ENV: {self.data['env']}\n"
             message += f"CREATE ORDERS TIME, SEC: {round(self.data['deal_time'], 6)}\n"
             message += f"PARSE TIME, SEC: {round(self.data['time_parser'], 6)}\n"
             message += f"CHOOSE DEAL TIME, SEC: {round(self.data['time_choose'], 6)}\n"
@@ -33,6 +33,7 @@ class DealsReports(BasePeriodicTask):
             message += f"PROFIT ABS, USD: {round(self.data['profit_usd'], 2)}\n"
             message += f"FEE SELL, %: {round(self.data['fee_sell'] * 100, 6)}\n"
             message += f"FEE BUY, %: {round(self.data['fee_buy'] * 100, 6)}\n"
+
             if self.data['buy_px'] == 0:
                 message += f"WARNING! {self.data['buy_exch']} CLIENT DOESN'T CREATE ORDERS"
             elif self.data['sell_px'] == 0:
@@ -41,7 +42,8 @@ class DealsReports(BasePeriodicTask):
             await self.__update_one(self.data['ts'], self.data['sell_exch'], self.data['buy_exch'])
 
             self.data = {
-                'chat_id': self.CHAT_ID,
+                'chat_id': self.data['chat_id'],
+                'bot_token': self.data['bot_token'],
                 'msg': message
             }
             await self.send_to_rabbit()

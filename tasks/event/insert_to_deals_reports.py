@@ -38,7 +38,8 @@ class InsertToDealsReports:
             16. buy_ob_bid
             17. deal_time
             18. time_parser
-            19. time_choose)
+            19. time_choose
+            20. env)
         :return: None
         """
 
@@ -75,7 +76,10 @@ class InsertToDealsReports:
                 buy_ob_bid,
                 deal_time,
                 time_parser,
-                time_choose
+                time_choose,
+                env,
+                chat_id,
+                bot_token
                 )
             values(
                 {data['timestamp']},
@@ -96,7 +100,10 @@ class InsertToDealsReports:
                 {data['buy_ob_bid']},
                 {data['deal_time']},
                 {data['time_parser']},
-                {data['time_choose']}
+                {data['time_choose']},
+                '{data['env']}',
+                {data['chat_id']},
+                '{data['bot_token']}'
                 )         
             """
         await cursor.execute(sql)

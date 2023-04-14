@@ -49,13 +49,19 @@ class InsertToPingLogging:
                 status_of_ping, 
                 ts_of_request, 
                 ts_from_response, 
-                ts_received_response)
+                ts_received_response,
+                chat_id,
+                bot_token
+            )
             values(
                 '{data["server_name"]}', 
                 '{data["exchange_name"]}', 
                 '{data["status_of_ping"]}', 
                 {data["ts_of_request"]}, 
                 {data["ts_from_response"]}, 
-                {data["ts_received_response"]})         
+                {data["ts_received_response"]},
+                {data['chat_id']},
+                '{data['bot_token']}'
+                )         
             """
         await cursor.execute(sql)

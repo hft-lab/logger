@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 from core.base_periodic_task import BasePeriodicTask
 
@@ -11,24 +12,26 @@ class BalancingReports(BasePeriodicTask):
     ROUTING_KEY = 'logger.event.send_message'
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
-    CHAT_ID = -853372015
 
     async def prepare_message(self):
         if self.data:
-            coin = self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')
-            size_usd = abs(round(self.data['position_gap'] * self.data['price'], 2))
+            size_usd = abs(round(self.data['position_gap'], 2))
             message = f"CREATED BALANCING ORDER\n"
-            message += f"SIZE, {coin}: {self.data['position_gap']}\n"
+            message += f"EXCHANGES: {self.data['exchange_name']}\n"
+            message += f"ENV: {self.data['env']}\n"
+            message += f"SIZE, {self.data['coin'].split('USD')[0].replace('-', '').replace('/', '')}: " \
+                       f"{round(size_usd / self.data['price'], 2)}\n"
             message += f"SIZE, USD: {size_usd}\n"
             message += f"PRICE: {round(self.data['price'], 2)}\n"
             message += f"SIDE: {self.data['side']}\n"
             message += f"TAKER FEE: {self.data['taker_fee']}\n"
-            message += f"TIMESTAMP, SEC: {round(self.data['ts'])}"
+            message += f"TIME (UTC): {datetime.datetime.fromtimestamp(round(self.data['ts'] / 1000))}"
 
             await self.__update_one(self.data['ts'], self.data['exchange_name'])
 
             self.data = {
-                'chat_id': self.CHAT_ID,
+                'chat_id': self.data['chat_id'],
+                'bot_token': self.data['bot_token'],
                 'msg': message
             }
             await self.send_to_rabbit()

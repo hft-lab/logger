@@ -40,6 +40,7 @@ class BasePeriodicTask:
             await self.get_data()
             await self.prepare_message()
 
+
         await self.db.close()
 
     async def connect_db(self) -> None:

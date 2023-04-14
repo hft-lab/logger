@@ -1,0 +1,1 @@
+ALTER TYPE ping_status_enum ADD VALUE 'error';
