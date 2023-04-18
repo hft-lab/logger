@@ -99,6 +99,26 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_deals_reports'
 
+  insert_balance_jumps:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balance_jumps'
+
   insert_balance_check:
     logging:
       driver: "json-file"
