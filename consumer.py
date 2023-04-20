@@ -11,6 +11,7 @@ from aiohttp.web import Application
 
 from config import Config
 from tasks.event.insert_to_balance_check import InsertToBalanceCheck
+from tasks.event.insert_to_balance_jumps import InsertToBalanceJumps
 from tasks.event.insert_to_balancing_reports import InsertToBalancingReports
 from tasks.event.insert_to_deals_reports import InsertToDealsReports
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 TASKS = {
     'logger.event.insert_ping_logger': InsertToPingLogging,
     'logger.event.send_message': Telegram,
-
+    'logger.event.insert_balance_jumps': InsertToBalanceJumps,
     'logger.event.insert_deals_reports': InsertToDealsReports,
     'logger.event.insert_balance_check': InsertToBalanceCheck,
     'logger.event.insert_balancing_reports': InsertToBalancingReports
