@@ -23,11 +23,15 @@ class BalanceCheck(BasePeriodicTask):
             total_balance = 0
             index_price = []
             no_need = []
-
+            coin = self.data[0]['symbol'].split('USD')[0].replace('-', '').replace('/', '')
             for row in self.data:
+                if coin in ['XBT', 'BTC']:
+                    if not 'XBT' in row['symbol'] and 'BTC' not in row['symbol']:
+                        continue
+                else:
+                    if not coin in row['symbol']:
+                        continue
                 if not row['exchange_name'] in no_need:
-                    coin = row['symbol'].split('USD')[0].replace('-', '').replace('/', '')
-
                     message += f"   EXCHANGE: {row['exchange_name']}\n"
                     message += f"ENV: {row['env']}\n"
                     message += f"TOT BAL: {row['total_balance']} USD\n"
