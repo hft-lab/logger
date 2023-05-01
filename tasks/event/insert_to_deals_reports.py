@@ -59,6 +59,9 @@ class InsertToDealsReports:
         sql = f"""
             insert into deals_reports(
                 ts,
+                date_utc,
+                sell_order_id,
+                buy_order_id,
                 sell_exch,
                 buy_exch,
                 sell_px, 
@@ -78,11 +81,15 @@ class InsertToDealsReports:
                 time_parser,
                 time_choose,
                 env,
+                coin,
                 chat_id,
                 bot_token
                 )
             values(
                 {data['timestamp']},
+                '{data['date_utc']}'
+                '{data['sell_order_id']}',
+                '{data['buy_order_id']}',
                 '{data['sell_exch']}',
                 '{data['buy_exch']}',
                 {data['sell_px']},
@@ -102,6 +109,7 @@ class InsertToDealsReports:
                 {data['time_parser']},
                 {data['time_choose']},
                 '{data['env']}',
+                '{data['coin']}'
                 {data['chat_id']},
                 '{data['bot_token']}'
                 )         
