@@ -47,7 +47,7 @@ class BalanceCheck(BasePeriodicTask):
             message += f"CHANGE OF BALANCE ABS: {abs(start_balance - total_balance)}\n"
             message += f"TOTAL BALANCE: {round(total_balance, 2)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
-            min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)
+            min_to_last_deal = round((time.time() * 1000 - self.data[0]['ts']) / 60)
             message += f"LAST DEAL WAS {min_to_last_deal} MIN BEFORE\n"
             message += f"INDEX PX: {round(sum(index_price) / len(index_price), 2)} USD\n"
 
