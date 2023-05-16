@@ -15,6 +15,10 @@ class BalanceCheck(BasePeriodicTask):
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
 
+    def __init__(self, symbols_list):
+        super().__init__()
+        self.symbols_list = symbols_list
+
     async def prepare_message(self):
         if self.data and (datetime.utcnow() - datetime.fromtimestamp(self.data[-1]['ts'] / 1000)).seconds / 60 >= 3:
             message = f'BALANCES AND POSITION\n'
@@ -86,13 +90,21 @@ class BalanceCheck(BasePeriodicTask):
         return res['bal']
 
     async def get_data(self) -> None:
-        sql = """
+        symbol_lists = '('
+        for symbol in self.symbols_list:
+            symbol_lists += "'" + symbol + "'" + ","
+
+        symbol_lists = symbol_lists[:-1] + ')'
+
+
+        sql = f"""
             select 
                 *
             from
                balance_check dc
             where 
-                dc.was_sent = False
+                dc.was_sent = False and 
+                dc.symbol in {symbol_lists}
             order by
                 dc.ts desc
             """
@@ -105,7 +117,8 @@ class BalanceCheck(BasePeriodicTask):
             set 
                 was_sent = True
             where
-                 was_sent = False
+                 was_sent = False,
+                 
             """
         await self.cursor.execute(sql)
 

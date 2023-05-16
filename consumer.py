@@ -10,10 +10,15 @@ from aio_pika import connect_robust
 from aiohttp.web import Application
 
 from config import Config
+from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossibilities
 from tasks.event.insert_to_balance_check import InsertToBalanceCheck
+from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization
 from tasks.event.insert_to_balance_jumps import InsertToBalanceJumps
+from tasks.event.insert_to_balances import InsertToBalances
 from tasks.event.insert_to_balancing_reports import InsertToBalancingReports
 from tasks.event.insert_to_deals_reports import InsertToDealsReports
+from tasks.event.insert_to_disbalances import InsertToDisbalance
+from tasks.event.insert_to_orders import InsertToOrders
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
 
 from tasks.event.send_to_telegram import Telegram
@@ -27,7 +32,14 @@ TASKS = {
     'logger.event.insert_balance_jumps': InsertToBalanceJumps,
     'logger.event.insert_deals_reports': InsertToDealsReports,
     'logger.event.insert_balance_check': InsertToBalanceCheck,
-    'logger.event.insert_balancing_reports': InsertToBalancingReports
+    'logger.event.insert_balancing_reports': InsertToBalancingReports,
+
+    # NEW ------------------------------------------------------------------------
+    'logger.event.insert_arbitrage_possibilities': InsertToArbitragePossibilities,
+    'logger.event.insert_orders': InsertToOrders,
+    'logger.event.insert_balances': InsertToBalances,
+    'logger.event.insert_balance_detalization': InsertToBalanceDetalization,
+    'logger.event.insert_disbalances': InsertToDisbalance
 }
 
 
