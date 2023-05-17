@@ -84,7 +84,7 @@ class InsertToOrders:
             values(
                 '{data['id']}',
                 '{data['datetime']}',
-                '{data['ts']},
+                {data['ts']},
                 '{data['context']}',
                 '{data['parent_id']}',
                 '{data['exchange_order_id']}',
@@ -105,5 +105,4 @@ class InsertToOrders:
                 '{data['env']}'
                 )         
             """
-        print(sql)
         await cursor.execute(sql)

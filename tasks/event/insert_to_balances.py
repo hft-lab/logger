@@ -77,7 +77,7 @@ class InsertToBalances:
                 {data['available_for_sell']},
                 {data['exchange_available_for_buy']},
                 {data['exchange_available_for_sell']},
-                '{data['env']}'
+                '{data['env']}',
                 {data['chat_id']},
                 '{data['bot_token']}'
                 )         
