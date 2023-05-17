@@ -111,13 +111,19 @@ class BalanceCheck(BasePeriodicTask):
         self.data = await self.cursor.fetch(sql)
 
     async def __update_all(self):
-        sql = """
+        symbol_lists = '('
+        for symbol in self.symbols_list:
+            symbol_lists += "'" + symbol + "'" + ","
+
+        symbol_lists = symbol_lists[:-1] + ')'
+        sql = f"""
             update 
                 balance_check 
             set 
                 was_sent = True
             where
-                 was_sent = False,
+                was_sent = False and 
+                symbol in {symbol_lists}
                  
             """
         await self.cursor.execute(sql)
