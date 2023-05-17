@@ -8,8 +8,6 @@ CREATE TABLE IF NOT EXISTS arbitrage_possibilities (
     buy_order_id VARCHAR(64) NOT NULL,
     sell_order_id VARCHAR(64) NOT NULL,
     available_for_buy FLOAT NOT NULL,
-    available_for_sell FLOAT NOT NULL,
-    max_buy_vol FLOAT NOT NULL,
     max_sell_vol FLOAT NOT NULL,
     expect_buy_price FLOAT NOT NULL,
     expect_sell_price FLOAT NOT NULL,

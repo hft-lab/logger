@@ -5,7 +5,9 @@ BEGIN
             'pre-deal',
 			'post-deal',
 			'schedule',
-			'manual'
+			'manual',
+			'bot',
+			'balancing'
         );
     END IF;
 END$$;
