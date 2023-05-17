@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS balance_detalization (
     id UUID NOT NULL UNIQUE,
     datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
-	context  VARCHAR(64) NOT NULL,
+	context  context_enum NOT NULL,
     parent_id UUID NOT NULL,
 	exchange VARCHAR(64) NOT NULL,
 	side VARCHAR(64) NOT NULL,

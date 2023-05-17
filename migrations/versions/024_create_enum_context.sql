@@ -7,7 +7,10 @@ BEGIN
 			'schedule',
 			'manual',
 			'bot',
-			'balancing'
+			'balancing',
+			'balance',
+			'disbalance'
         );
     END IF;
 END$$;
+
