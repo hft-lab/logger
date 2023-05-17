@@ -21,7 +21,7 @@ class InsertToDisbalance:
         Get cursor and start insert func
         :param payload: dict with NOT NULL values (
                 id,
-                dt,
+                datetime,
                 ts,
                 coin_name,
                 position_coin,
@@ -46,7 +46,7 @@ class InsertToDisbalance:
         sql = f"""
             insert into disbalances(
                 id,
-                dt,
+                datetime,
                 ts,
                 coin_name,
                 position_coin,
@@ -55,7 +55,7 @@ class InsertToDisbalance:
                 )
             values(
                 '{data['id']}',
-                '{data['dt']}',
+                '{data['datetime']}',
                 '{data['ts']},
                 '{data['coin_name']}',
                 {data['position_coin']},

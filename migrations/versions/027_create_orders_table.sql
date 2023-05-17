@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS orders (
     id UUID NOT NULL UNIQUE,
-    dt timestamptz NOT NULL,
+    datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
-	context context_enum NOT NULL,
+	context VARCHAR(64) NOT NULL,
     parent_id UUID NOT NULL,
 	exchange_order_id VARCHAR(64) NOT NULL,
 	type VARCHAR(8) NOT NULL,

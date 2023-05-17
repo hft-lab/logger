@@ -21,7 +21,7 @@ class InsertToOrders:
         Get cursor and start insert func
         :param payload: dict with NOT NULL values (
                             id,
-                            dt,
+                            datetime,
                             ts,
                             context,
                             parent_id,
@@ -60,7 +60,7 @@ class InsertToOrders:
         sql = f"""
             insert into orders(
                 id,
-                dt,
+                datetime,
                 ts,
                 context,
                 parent_id,
@@ -83,7 +83,7 @@ class InsertToOrders:
                 )
             values(
                 '{data['id']}',
-                '{data['dt']}',
+                '{data['datetime']}',
                 '{data['ts']},
                 '{data['context']}',
                 '{data['parent_id']}',

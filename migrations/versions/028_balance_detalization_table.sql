@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS balance_detalization (
     id UUID NOT NULL UNIQUE,
-    dt timestamptz NOT NULL,
+    datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
-	context context_enum NOT NULL,
+	context  VARCHAR(64) NOT NULL,
     parent_id UUID NOT NULL,
 	exchange VARCHAR(64) NOT NULL,
 	side VARCHAR(64) NOT NULL,
@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS balance_detalization (
 	position_coin FLOAT NOT NULL,
 	position_usd FLOAT NOT NULL,
 	entry_price FLOAT NOT NULL,
-	current_price FLOAT NOT NULL
+	mark_price FLOAT NOT NULL
 );

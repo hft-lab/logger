@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS disbalances (
     id UUID NOT NULL UNIQUE,
-    dt timestamptz NOT NULL,
+    datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
 	coin_name VARCHAR(64) NOT NULL,
 	position_coin FLOAT NOT NULL DEFAULT 10,

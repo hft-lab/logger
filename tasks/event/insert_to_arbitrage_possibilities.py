@@ -64,7 +64,7 @@ class InsertToArbitragePossibilities:
         sql = f"""
             insert into arbitrage_possibilities(
                     id,
-                    dt,
+                    datetime,
                     ts,
                     buy_exchange,
                     sell_exchange,
@@ -91,7 +91,7 @@ class InsertToArbitragePossibilities:
                 )
             values(
                     '{data['id']}',
-                    '{data['dt']}',
+                    '{data['datetime']}',
                     {data['ts']},
                     '{data['buy_exchange']}',
                     '{data['sell_exchange']}',

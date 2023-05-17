@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS arbitrage_possibilities (
     id UUID NOT NULL UNIQUE,
-    dt timestamptz NOT NULL,
+    datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
 	buy_exchange VARCHAR(64) NOT NULL,
 	sell_exchange VARCHAR(64) NOT NULL,

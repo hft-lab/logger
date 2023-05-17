@@ -51,26 +51,29 @@ class InsertToBalances:
         sql = f"""
             insert into balances(
                 id,
-                dt,
+                datetime,
                 ts,
                 context,
                 parent_id,
                 exchange,
                 exchange_balance,
+                available_for_buy,
+                available_for_sell,
                 exchange_available_for_buy,
                 exchange_available_for_sell,
-                was_sent,
                 chat_id,
-                bot_token
+                bot_token               
                 )
             values(
                 '{data['id']}',
-                '{data['dt']}',
+                '{data['datetime']}',
                 {data['ts']},
                 '{data['context']}',
                 '{data['parent_id']}',
                 '{data['exchange']}',
                 {data['exchange_balance']},
+                {data['available_for_buy']},
+                {data['available_for_sell']},
                 {data['exchange_available_for_buy']},
                 {data['exchange_available_for_sell']},
                 {data['chat_id']},

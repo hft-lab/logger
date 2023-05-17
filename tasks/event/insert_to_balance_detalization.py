@@ -53,7 +53,7 @@ class InsertToBalanceDetalization:
         sql = f"""
             insert into balance_detalization(
                         id,
-                        dt,
+                        datetime,
                         ts,
                         context,
                         parent_id,
@@ -69,7 +69,7 @@ class InsertToBalanceDetalization:
                 )
             values(
                         '{data['id']}',
-                        '{data['dt']}',
+                        '{data['datetime']}',
                         {data['ts']},
                         '{data['context']}',
                         '{data['parent_id']}',
