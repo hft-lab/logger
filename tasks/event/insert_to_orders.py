@@ -102,7 +102,8 @@ class InsertToOrders:
                 {data['factual_amount_usd']},
                 {data['factual_fee']},
                 {data['order_place_time']},
-                {data['env']}'
+                '{data['env']}'
                 )         
             """
+        print(sql)
         await cursor.execute(sql)

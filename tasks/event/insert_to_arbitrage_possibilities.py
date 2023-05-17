@@ -71,8 +71,6 @@ class InsertToArbitragePossibilities:
                     symbol,
                     buy_order_id,
                     sell_order_id,
-                    available_for_buy,
-                    available_for_sell,
                     max_buy_vol,
                     max_sell_vol,
                     expect_buy_price,
@@ -98,8 +96,6 @@ class InsertToArbitragePossibilities:
                     '{data['symbol']}',
                     '{data['buy_order_id']}',
                     '{data['sell_order_id']}',
-                     {data['available_for_buy']},
-                     {data['available_for_sell']},
                      {data['max_buy_vol']},
                      {data['max_sell_vol']},
                      {data['expect_buy_price']},
@@ -117,4 +113,5 @@ class InsertToArbitragePossibilities:
                      '{data['bot_token']}'
                 )         
             """
+        print(sql)
         await cursor.execute(sql)
