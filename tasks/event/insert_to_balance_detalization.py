@@ -33,7 +33,7 @@ class InsertToBalanceDetalization:
                         position_coin,
                         position_usd,
                         entry_price,
-                        current_price
+                        mark_price
         :return: None
         """
 
@@ -65,7 +65,7 @@ class InsertToBalanceDetalization:
                         position_coin,
                         position_usd,
                         entry_price,
-                        current_price
+                        mark_price
                 )
             values(
                         '{data['id']}',
@@ -81,7 +81,7 @@ class InsertToBalanceDetalization:
                         {data['position_coin']},
                         {data['position_usd']}',
                         {data['entry_price']}',
-                        {data['current_price']},
+                        {data['mark_price']}
                 )         
             """
         await cursor.execute(sql)
