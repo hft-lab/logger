@@ -28,7 +28,6 @@ class InsertToArbitragePossibilities:
                     6. symbol,
                     7. buy_order_id,
                     8. sell_order_id,
-                    9. available_for_buy,
                     10. available_for_sell,
                     11. max_buy_vol,
                     12. max_sell_vol,
