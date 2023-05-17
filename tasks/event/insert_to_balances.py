@@ -82,5 +82,4 @@ class InsertToBalances:
                 '{data['bot_token']}'
                 )         
             """
-        print(sql)
         await cursor.execute(sql)
