@@ -83,7 +83,6 @@ class InsertToArbitragePossibilities:
                     expect_fee_sell,
                     time_parser,
                     time_choose,
-                    was_sent,
                     chat_id,
                     bot_token
                 )
@@ -108,10 +107,8 @@ class InsertToArbitragePossibilities:
                      {data['expect_fee_sell']},
                      {data['time_parser']},
                      {data['time_choose']},
-                     {data['was_sent']},
                      '{data['chat_id']}',
                      '{data['bot_token']}'
                 )         
             """
-        print(sql)
         await cursor.execute(sql)
