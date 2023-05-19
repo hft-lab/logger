@@ -80,7 +80,7 @@ class InsertToBalanceDetalization:
                         {data['current_margin']},
                         {data['position_coin']},
                         {data['position_usd']},
-                        {data['entry_price']}',
+                        {data['entry_price']},
                         {data['mark_price']}
                 )         
             """
