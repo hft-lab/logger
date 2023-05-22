@@ -26,7 +26,6 @@ class InsertToBalanceDetalization:
                         context,
                         parent_id,
                         exchange,
-                        side,
                         symbol,
                         max_margin,
                         current_margin,
@@ -51,14 +50,13 @@ class InsertToBalanceDetalization:
         :return: None
         """
         sql = f"""
-            insert into balance_detalization(
+            insert into balances_detalization(
                         id,
                         datetime,
                         ts,
                         context,
                         parent_id,
                         exchange,
-                        side,
                         symbol,
                         max_margin,
                         current_margin,
@@ -74,7 +72,6 @@ class InsertToBalanceDetalization:
                         '{data['context']}',
                         '{data['parent_id']}',
                         '{data['exchange']}',
-                        '{data['side']}',
                         '{data['symbol']}',
                         {data['max_margin']},
                         {data['current_margin']},
