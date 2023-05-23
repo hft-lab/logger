@@ -44,6 +44,7 @@ class InsertToArbitragePossibilities:
                     23. was_sent,
                     24. chat_id,
                     25. bot_token
+                    26. shift
         :return: None
         """
 
@@ -83,7 +84,8 @@ class InsertToArbitragePossibilities:
                     time_parser,
                     time_choose,
                     chat_id,
-                    bot_token
+                    bot_token,
+                    shift
                 )
             values(
                     '{data['id']}',
@@ -107,7 +109,8 @@ class InsertToArbitragePossibilities:
                      {data['time_parser']},
                      {data['time_choose']},
                      '{data['chat_id']}',
-                     '{data['bot_token']}'
+                     '{data['bot_token']}',
+                     {data['shift']}
                 )         
             """
         await cursor.execute(sql)
