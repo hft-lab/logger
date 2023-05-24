@@ -56,7 +56,7 @@ class InsertToDisbalance:
             values(
                 '{data['id']}',
                 '{data['datetime']}',
-                '{data['ts']},
+                {data['ts']},
                 '{data['coin_name']}',
                 {data['position_coin']},
                 {data['position_usd']},
