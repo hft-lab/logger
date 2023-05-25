@@ -35,7 +35,8 @@ class CheckOrders:
                 distinct on (exchange) exchange
             from 
                 orders) and 
-            o.exchange_order_id != 'default'
+            o.exchange_order_id != 'default' and 
+            o.status = 'Processing'
         order by 
             ts desc
         limit 
@@ -52,7 +53,7 @@ class CheckOrders:
                     },
                     exchange_name=self.EXCHANGE_NAME,
                     routing_key=self.ROUTING_KEY,
-                    queue_name=self.QUEUE_NAME,
+                    queue_name=self.QUEUE_NAME
                 )
 
 
