@@ -47,7 +47,7 @@ class CheckOrders:
                 await publish_message(
                     connection=self.app['mq'],
                     message= {
-                        'order_ids': [x['orders_ids'] for x in order],
+                        'order_ids': [x for x in order['orders_ids']],
                         'exchange': data['exchange']
                     },
                     exchange_name=self.EXCHANGE_NAME,
