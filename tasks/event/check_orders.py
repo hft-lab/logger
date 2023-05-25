@@ -30,11 +30,6 @@ class CheckOrders:
         from 
             orders o 
         where 
-            o.exchange in (
-            select 
-                distinct on (exchange) exchange
-            from 
-                orders) and 
             o.exchange_order_id != 'default' and 
             o.status = 'Processing'
         order by 
