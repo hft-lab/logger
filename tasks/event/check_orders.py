@@ -51,7 +51,7 @@ class CheckOrders:
         if data := await cursor.fetch(sql):
             await publish_message(
                 connection=self.app['mq'],
-                message= data['orders_ids'] + [exchange],
+                message= [x['exchanges'] for x in data['orders_ids']] + [exchange],
                 exchange_name=self.EXCHANGE_NAME,
                 routing_key=self.ROUTING_KEY,
                 queue_name=self.QUEUE_NAME,
