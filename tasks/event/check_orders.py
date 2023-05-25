@@ -46,6 +46,10 @@ class CheckOrders:
         where 
             o.exchange = '{exchange}' and 
             o.exchange_order_id != 'default'
+        order by 
+            ts desc
+        limit 
+            5
         """
 
         if data := await cursor.fetch(sql):
