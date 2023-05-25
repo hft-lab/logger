@@ -21,7 +21,6 @@ from tasks.event.insert_to_deals_reports import InsertToDealsReports
 from tasks.event.insert_to_disbalances import InsertToDisbalance
 from tasks.event.insert_to_orders import InsertToOrders
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
-
 from tasks.event.send_to_telegram import Telegram
 from tasks.event.update_orders import UpdateOrders
 

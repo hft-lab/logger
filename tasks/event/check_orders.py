@@ -48,7 +48,7 @@ class CheckOrders:
                     connection=self.app['mq'],
                     message= {
                         'order_ids': [x for x in order['orders_ids']],
-                        'exchange': data['exchange']
+                        'exchange': order['exchange']
                     },
                     exchange_name=self.EXCHANGE_NAME,
                     routing_key=self.ROUTING_KEY,
