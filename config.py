@@ -35,7 +35,7 @@ class Config:
             'exchange': 'logger.periodic',
             'queue': 'logger.periodic.check_orders',
             'routing_key': 'logger.periodic.check_orders',
-            'interval': MINUTE * 3,
+            'interval': SECOND * 30,
             'delay': SECOND * 10,
             'payload': {}
         }

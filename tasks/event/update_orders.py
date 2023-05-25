@@ -29,7 +29,7 @@ class UpdateOrders:
             factual_amount_coin = {payload['factual_amount_coin']},
             factual_amount_usd = {payload['factual_amount_usd']}           
         where 
-            exchange = {payload['exchange']} and 
-            exchange_order_id = {payload['exchange_order_id']}
+            exchange = '{payload['exchange']}' and 
+            exchange_order_id = '{payload['exchange_order_id']}'
         """
         await cursor.execute(sql)
