@@ -35,7 +35,7 @@ class CheckOrders:
             orders
         """
 
-        self.exchanges_names = await cursor.fetch(sql)
+        self.exchanges_names = [x['exchanges'] for x in await cursor.fetch(sql)]
 
     async def __get_and_send_orders_by_exchange_name(self, exchange, cursor):
         sql = f"""
