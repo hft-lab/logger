@@ -6,7 +6,8 @@ from tasks.periodic.balancing_reports import BalancingReports
 from tasks.periodic.deals_reports import DealsReports
 
 TASKS = [
-    BalanceCheck(),
+    BalanceCheck(symbols_list=['BTC-USD', 'BTCUSDT', 'XBTUSD']),
+    BalanceCheck(symbols_list=['ETH-USD', 'ETHUSDT', 'ETHUSD']),
     BalancingReports(),
     DealsReports()
 ]

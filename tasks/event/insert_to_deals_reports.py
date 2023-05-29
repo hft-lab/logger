@@ -87,7 +87,7 @@ class InsertToDealsReports:
                 )
             values(
                 {data['timestamp']},
-                '{data['date_utc']}'
+                '{data['date_utc']}',
                 '{data['sell_order_id']}',
                 '{data['buy_order_id']}',
                 '{data['sell_exch']}',
@@ -109,7 +109,7 @@ class InsertToDealsReports:
                 {data['time_parser']},
                 {data['time_choose']},
                 '{data['env']}',
-                '{data['coin']}'
+                '{data['coin']}',
                 {data['chat_id']},
                 '{data['bot_token']}'
                 )         

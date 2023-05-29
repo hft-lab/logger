@@ -15,6 +15,10 @@ class BalanceCheck(BasePeriodicTask):
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.send_message'
 
+    def __init__(self, symbols_list):
+        super().__init__()
+        self.symbols_list = symbols_list
+
     async def prepare_message(self):
         if self.data and (datetime.utcnow() - datetime.fromtimestamp(self.data[-1]['ts'] / 1000)).seconds / 60 >= 3:
             message = f'BALANCES AND POSITION\n'
@@ -51,7 +55,7 @@ class BalanceCheck(BasePeriodicTask):
             message += f"CHANGE OF BALANCE ABS: {abs(start_balance - total_balance)}\n"
             message += f"TOTAL BALANCE: {round(total_balance, 2)} USD\n"
             message += f"POSITION: {round(total_position, 4)} {coin}\n"
-            min_to_last_deal = round((time.time() - self.data[0]['ts']) / 60)
+            min_to_last_deal = round((time.time() * 1000 - self.data[0]['ts']) / 60)
             message += f"LAST DEAL WAS {min_to_last_deal} MIN BEFORE\n"
             message += f"INDEX PX: {round(sum(index_price) / len(index_price), 2)} USD\n"
 
@@ -90,26 +94,41 @@ class BalanceCheck(BasePeriodicTask):
         return res['bal']
 
     async def get_data(self) -> None:
-        sql = """
+        symbol_lists = '('
+        for symbol in self.symbols_list:
+            symbol_lists += "'" + symbol + "'" + ","
+
+        symbol_lists = symbol_lists[:-1] + ')'
+
+
+        sql = f"""
             select 
                 *
             from
                balance_check dc
             where 
-                dc.was_sent = False
+                dc.was_sent = False and 
+                dc.symbol in {symbol_lists}
             order by
                 dc.ts desc
             """
         self.data = await self.cursor.fetch(sql)
 
     async def __update_all(self):
-        sql = """
+        symbol_lists = '('
+        for symbol in self.symbols_list:
+            symbol_lists += "'" + symbol + "'" + ","
+
+        symbol_lists = symbol_lists[:-1] + ')'
+        sql = f"""
             update 
                 balance_check 
             set 
                 was_sent = True
             where
-                 was_sent = False
+                was_sent = False and 
+                symbol in {symbol_lists}
+                 
             """
         await self.cursor.execute(sql)
 

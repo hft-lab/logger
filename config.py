@@ -4,6 +4,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+SECOND = 1
+MINUTE = 60
+TEN_MINUTES = MINUTE * 10
+HOUR = MINUTE * 60
+DAY = HOUR * 24
 
 class Config:
     """
@@ -24,6 +29,17 @@ class Config:
         'username': os.getenv('RABBIT_MQ_USER'),
         'password': os.getenv('RABBIT_MQ_PASSWORD')
     }
+
+    PERIODIC_TASKS = [
+        {
+            'exchange': 'logger.periodic',
+            'queue': 'logger.periodic.check_orders',
+            'routing_key': 'logger.periodic.check_orders',
+            'interval': SECOND * 30,
+            'delay': SECOND * 10,
+            'payload': {}
+        }
+    ]
 
     LOGGING = {
         'version': 1,

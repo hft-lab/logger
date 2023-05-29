@@ -139,6 +139,166 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balance_check'
 
+  insert_arbitrage_possibilities:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_arbitrage_possibilities'
+
+  insert_orders:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_orders'
+
+  insert_balances:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balances'
+
+  insert_balance_detalization:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_balance_detalization'
+
+  insert_disbalances:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_disbalances'
+
+  update_orders:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.update_orders'
+
+  check_orders:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_orders'
+
+  producer:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python producer.py'
+
   periodic:
     logging:
       driver: "json-file"
