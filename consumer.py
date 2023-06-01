@@ -10,7 +10,7 @@ from aio_pika import connect_robust
 from aiohttp.web import Application
 
 from config import Config
-from tasks.event.check_orders import CheckOrders
+from tasks.periodic.check_orders import CheckOrders
 from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossibilities
 from tasks.event.insert_to_balance_check import InsertToBalanceCheck
 from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization

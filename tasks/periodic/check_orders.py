@@ -8,9 +8,11 @@ dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
 
 class CheckOrders:
-    ROUTING_KEY = 'logger.event.get_orders_results'
-    EXCHANGE_NAME = 'logger.event'
-    QUEUE_NAME = 'logger.event.get_orders_results'
+    ROUTING_KEY = 'logger.event_{}.get_orders_results'
+    EXCHANGE_NAME = 'logger.event_{}'
+    QUEUE_NAME = 'logger.event_{}.get_orders_results'
+
+    SYMBOLS = ['BTC-USD', 'BTCUSDT', 'XBTUSD']
 
     def __init__(self, app):
         self.app = app
@@ -26,7 +28,8 @@ class CheckOrders:
         sql = f"""
         select 
             o.exchange_order_id as orders_ids,
-            o.exchange 
+            o.exchange,
+            o.symbol 
         from 
             orders o 
         where 
@@ -40,15 +43,16 @@ class CheckOrders:
 
         if data := await cursor.fetch(sql):
             for order in data:
+                SYMBOL = 'BTCUSD' if order['symbol'] in self.SYMBOLS else 'ETHUSD'
                 await publish_message(
                     connection=self.app['mq'],
                     message= {
                         'order_ids': order['orders_ids'],
                         'exchange': order['exchange']
                     },
-                    exchange_name=self.EXCHANGE_NAME,
-                    routing_key=self.ROUTING_KEY,
-                    queue_name=self.QUEUE_NAME
+                    exchange_name=self.EXCHANGE_NAME.format(SYMBOL),
+                    routing_key=self.ROUTING_KEY.format(SYMBOL),
+                    queue_name=self.QUEUE_NAME.format(SYMBOL)
                 )
 
 
