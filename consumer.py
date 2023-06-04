@@ -43,7 +43,7 @@ TASKS = {
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
 
-    'logger.periodic.check_orders': CheckOrders,
+    # 'logger.periodic.check_orders': CheckOrders,
 
 }
 

@@ -259,45 +259,45 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.update_orders'
 
-  check_orders:
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-    build:
-      context: .
-      dockerfile: "dockerfiles/Dockerfile.workers"
-    env_file:
-      - .env
-    depends_on:
-      - migrate
-    restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command:
-      - '/bin/sh'
-      - '-c'
-      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_orders'
+#  check_orders:
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "5m"
+#    build:
+#      context: .
+#      dockerfile: "dockerfiles/Dockerfile.workers"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - migrate
+#    restart: always
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    command:
+#      - '/bin/sh'
+#      - '-c'
+#      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_orders'
 
-  producer:
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-    build:
-      context: .
-      dockerfile: "dockerfiles/Dockerfile.workers"
-    env_file:
-      - .env
-    depends_on:
-      - migrate
-    restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command:
-      - '/bin/sh'
-      - '-c'
-      - '/bin/sleep 10 && python producer.py'
+#  producer:
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "5m"
+#    build:
+#      context: .
+#      dockerfile: "dockerfiles/Dockerfile.workers"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - migrate
+#    restart: always
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    command:
+#      - '/bin/sh'
+#      - '-c'
+#      - '/bin/sleep 10 && python producer.py'
 
   periodic:
     logging:
