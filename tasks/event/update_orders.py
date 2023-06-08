@@ -27,7 +27,9 @@ class UpdateOrders:
             status = '{payload['status']}',
             factual_price = {payload['factual_price']},
             factual_amount_coin = {payload['factual_amount_coin']},
-            factual_amount_usd = {payload['factual_amount_usd']}           
+            factual_amount_usd = {payload['factual_amount_usd']},
+            datetime_update = '{payload['datetime_update']}',
+            ts_update = {payload['ts_update']}
         where 
             exchange = '{payload['exchange']}' and 
             exchange_order_id = '{payload['exchange_order_id']}'

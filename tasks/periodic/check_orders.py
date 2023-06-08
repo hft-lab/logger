@@ -34,7 +34,8 @@ class CheckOrders:
             orders o 
         where 
             o.exchange_order_id != 'default' and 
-            o.status = 'Processing'
+            o.status = 'Processing' and 
+            (CURRENT_TIMESTAMP - INTERVAL '4 minutes') AT TIME ZONE 'UTC' > o.datetime
         order by 
             ts desc
         limit 

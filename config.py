@@ -38,6 +38,14 @@ class Config:
             'interval': SECOND * 30,
             'delay': SECOND * 10,
             'payload': {}
+        },
+        {
+            'exchange': 'logger.periodic',
+            'queue': 'logger.periodic.check_arbitrage_possibilities',
+            'routing_key': 'logger.periodic.check_arbitrage_possibilities',
+            'interval': SECOND * 5,
+            'delay': SECOND * 5,
+            'payload': {}
         }
     ]
 
