@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS fundings (
-    id UUID VARCHAR(64) NOT NULL UNIQUE,
+    id UUID NOT NULL UNIQUE,
     datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
 	exchange_funding_id VARCHAR(64) NOT NULL,
