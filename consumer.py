@@ -12,6 +12,7 @@ from aiohttp.web import Application
 from config import Config
 from tasks.periodic.check_arbitrage_possibilities import UpdateArbitragePossibilities
 from tasks.periodic.check_orders import CheckOrders
+from tasks.event.insert_to_fundings import InsertFunding
 from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossibilities
 from tasks.event.insert_to_balance_check import InsertToBalanceCheck
 from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization
@@ -43,9 +44,10 @@ TASKS = {
     'logger.event.insert_balance_detalization': InsertToBalanceDetalization,
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
+    'logger.event.insert_funding': InsertFunding,
+
     'logger.periodic.check_arbitrage_possibilities': UpdateArbitragePossibilities,
     'logger.periodic.check_orders': CheckOrders
-
 }
 
 
@@ -111,7 +113,7 @@ class Consumer:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-q', nargs='?', const=True, dest='queue', default='update_arbitrage_possibilities')
+    parser.add_argument('-q', nargs='?', const=True, dest='queue', default='logger.event.insert_funding')
     args = parser.parse_args()
 
     loop = asyncio.get_event_loop()

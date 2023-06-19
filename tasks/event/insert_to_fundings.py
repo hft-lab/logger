@@ -1,11 +1,9 @@
-import datetime
 import logging
-import time
 
 logger = logging.getLogger(__name__)
 
 
-class CheckFunding:
+class InsertFunding:
     """
     Periodic task for check balance
     """
@@ -19,18 +17,6 @@ class CheckFunding:
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
 
     async def run(self, payload: dict) -> None:
-        payload = {
-            'id': 'JGFHY876K',
-            'datetime': datetime.datetime.utcnow(),
-            'ts': time.time(),
-            'exchange_funding_id': ,
-            exchange,
-            symbol,
-            amount,
-            asset,
-            position_coin,
-            price
-        }
         """
         Get cursor and start insert func
         :param payload: dict with NOT NULL values (
