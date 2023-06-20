@@ -125,7 +125,7 @@ class CheckAndUpdateDisbalances:
 
     async def __publish_message(self, id):
         message = {
-            'parent_id': id,
+            'parent_id': str(id),
             'context': 'post-balancing',
             'env': 'TOKYO_DEV',
             'chat_id': -807300930,

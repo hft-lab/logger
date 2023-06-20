@@ -125,13 +125,13 @@ class CheckAndUpdateArbitragePossibilities:
 
     async def __publish_message(self, id):
         message = {
-            'parent_id': id,
+            'parent_id': str(id),
             'context': 'post-deal',
             'env': 'TOKYO_DEV',
             'chat_id': -807300930,
             'telegram_bot': '6037890725:AAHSKzK9aazvOYU2AiBSDO8ZLE5bJaBNrBw'
         }
-
+        print(message)
         await publish_message(
             connection=self.app['mq'],
             message=message,
