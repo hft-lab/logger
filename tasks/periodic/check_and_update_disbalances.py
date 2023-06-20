@@ -22,6 +22,9 @@ class DisbalanceStatuses:
 
 
 class CheckAndUpdateDisbalances:
+    ROUTING_KEY = 'logger.event.check_balance'
+    EXCHANGE_NAME = 'logger.event.'
+    QUEUE_NAME = 'logger.event.check_balance'
 
     def __init__(self, app):
         self.app = app
@@ -118,10 +121,21 @@ class CheckAndUpdateDisbalances:
                     """
 
             await cursor.execute(sql)
+            await self.__publish_message(data['id'])
 
-    async def __publish_message(self):
+    async def __publish_message(self, id):
         message = {
-
+            'parent_id': id,
+            'context': 'post-balancing',
+            'env': 'TOKYO_DEV',
+            'chat_id': -807300930,
+            'telegram_bot': '6037890725:AAHSKzK9aazvOYU2AiBSDO8ZLE5bJaBNrBw'
         }
 
-        await publish_message()
+        await publish_message(
+            connection=self.app['mq'],
+            message=message,
+            exchange_name=self.EXCHANGE_NAME,
+            routing_key=self.ROUTING_KEY,
+            queue_name=self.QUEUE_NAME
+        )

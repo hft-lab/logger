@@ -127,15 +127,3 @@ class BalanceCheck(BasePeriodicTask):
                  
             """
         await self.cursor.execute(sql)
-
-
-if __name__ == '__main__':
-    worker = BalanceCheck()
-    loop = asyncio.get_event_loop()
-
-    try:
-        loop.run_until_complete(worker.run())
-    except Exception as e:
-        traceback.print_exc()
-    finally:
-        loop.close()
