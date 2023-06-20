@@ -63,7 +63,8 @@ class InsertToBalances:
                 exchange_available_for_sell,
                 env,
                 chat_id,
-                bot_token               
+                bot_token,
+                current_margin               
                 )
             values(
                 '{data['id']}',
@@ -79,7 +80,8 @@ class InsertToBalances:
                 {data['exchange_available_for_sell']},
                 '{data['env']}',
                 {data['chat_id']},
-                '{data['bot_token']}'
+                '{data['bot_token']}',
+                {data['current_margin']}
                 )         
             """
         await cursor.execute(sql)

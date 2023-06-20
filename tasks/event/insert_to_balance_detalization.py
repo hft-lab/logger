@@ -63,7 +63,10 @@ class InsertToBalanceDetalization:
                         position_coin,
                         position_usd,
                         entry_price,
-                        mark_price
+                        mark_price,
+                        available_for_buy,
+                        available_for_sell,
+                        grand_parent_id
                 )
             values(
                         '{data['id']}',
@@ -78,7 +81,10 @@ class InsertToBalanceDetalization:
                         {data['position_coin']},
                         {data['position_usd']},
                         {data['entry_price']},
-                        {data['mark_price']}
+                        {data['mark_price']},
+                        {data['available_for_buy']},
+                        {data['available_for_sell']},
+                        '{data['grand_parent_id']}',
                 )         
             """
         await cursor.execute(sql)

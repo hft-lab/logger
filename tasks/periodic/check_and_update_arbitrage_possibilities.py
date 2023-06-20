@@ -21,11 +21,11 @@ class ArbitragePossibilitiesStatuses:
     DISBALANCE = 'Disbalance'
 
 
-class UpdateArbitragePossibilities:
+class CheckAndUpdateArbitragePossibilities:
 
     def __init__(self, app):
         self.app = app
-        self.worker_name = 'CHECK_ARBITRAGE_POSSIBILITIES'
+        self.worker_name = 'CHECK_AND_UPDATE_ARBITRAGE_POSSIBILITIES'
         self.all_arbitrage_possibilities = []
         self.arbitrage_possibilities_to_update = []
 
@@ -47,6 +47,8 @@ class UpdateArbitragePossibilities:
            arbitrage_possibilities
         where 
             status = 'Processing' 
+        order by
+            ts desc
         """
 
         self.all_arbitrage_possibilities = [x['id'] for x in await cursor.fetch(sql)]
@@ -73,7 +75,6 @@ class UpdateArbitragePossibilities:
                     else_statuses.append(True)
                 elif row['status'] in OrderStatuses.UNSUCCESS:
                     else_statuses.append(False)
-
 
             if not in_processing and all(else_statuses):
                 self.arbitrage_possibilities_to_update.append(
@@ -118,9 +119,9 @@ class UpdateArbitragePossibilities:
 
             await cursor.execute(sql)
 
-    # async def __publish_message(self):
-    #     message = {
-    #
-    #     }
-    #
-    #     await publish_message()
+    async def __publish_message(self):
+        message = {
+
+        }
+
+        await publish_message()

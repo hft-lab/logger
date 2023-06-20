@@ -279,7 +279,7 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_orders'
 
-  update_arbitrage_posibilities:
+  check_and_update_arbitrage_possibilities:
     logging:
       driver: "json-file"
       options:
@@ -297,7 +297,27 @@ services:
     command:
       - '/bin/sh'
       - '-c'
-      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_arbitrage_possibilities'
+      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_and_update_arbitrage_possibilities'
+
+  check_and_update_disbalances:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.periodic.check_and_update_disbalances'
 
   producer:
     logging:

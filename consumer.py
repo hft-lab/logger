@@ -10,7 +10,8 @@ from aio_pika import connect_robust
 from aiohttp.web import Application
 
 from config import Config
-from tasks.periodic.check_arbitrage_possibilities import UpdateArbitragePossibilities
+from tasks.periodic.check_and_update_disbalances import CheckAndUpdateDisbalances
+from tasks.periodic.check_and_update_arbitrage_possibilities import CheckAndUpdateArbitragePossibilities
 from tasks.periodic.check_orders import CheckOrders
 from tasks.event.insert_to_fundings import InsertFunding
 from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossibilities
@@ -46,7 +47,8 @@ TASKS = {
     'logger.event.update_orders': UpdateOrders,
     'logger.event.insert_funding': InsertFunding,
 
-    'logger.periodic.check_arbitrage_possibilities': UpdateArbitragePossibilities,
+    'logger.periodic.check_and_update_arbitrage_possibilities': CheckAndUpdateArbitragePossibilities,
+    'logger.periodic.check_and_update_disbalances': CheckAndUpdateDisbalances,
     'logger.periodic.check_orders': CheckOrders
 }
 
