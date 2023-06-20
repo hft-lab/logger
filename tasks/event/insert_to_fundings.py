@@ -8,10 +8,6 @@ class InsertFunding:
     Periodic task for check balance
     """
 
-    ROUTING_KEY = 'logger.event.insert_funding'
-    EXCHANGE_NAME = 'logger.event'
-    QUEUE_NAME = 'logger.event.insert_funding'
-
     def __init__(self, app):
         self.app = app
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
@@ -60,16 +56,16 @@ class InsertFunding:
                 price
                 )
             values(
-                    '{data['id']}',
-                    '{data['datetime']}',
-                    {data['ts']},
-                    '{data['exchange_funding_id']}',
-                    '{data['exchange']}',
-                    '{data['symbol']}',
-                    {data['amount']},
-                    '{data['asset']}',
-                    {data['position']},
-                    {data['price']}
+                '{data['id']}',
+                '{data['datetime']}',
+                {data['ts']},
+                '{data['exchange_funding_id']}',
+                '{data['exchange']}',
+                '{data['symbol']}',
+                {data['amount']},
+                '{data['asset']}',
+                {data['position']},
+                {data['price']}
                 )         
             """
         await cursor.execute(sql)
