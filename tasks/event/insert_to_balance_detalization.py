@@ -84,7 +84,7 @@ class InsertToBalanceDetalization:
                         {data['mark_price']},
                         {data['available_for_buy']},
                         {data['available_for_sell']},
-                        '{data['grand_parent_id']}',
+                        '{data['grand_parent_id']}'
                 )         
             """
         await cursor.execute(sql)

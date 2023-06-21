@@ -52,9 +52,7 @@ class InsertToDisbalance:
                 position_coin,
                 position_usd,
                 price,
-                status,
-                status_datetime,
-                status_ts
+                status
                 )
             values(
                 '{data['id']}',
@@ -64,9 +62,7 @@ class InsertToDisbalance:
                 {data['position_coin']},
                 {data['position_usd']},
                 {data['price']},
-                '{data['status']}',
-                '{data['status_datetime']}',
-                {data['status_ts']}
+                '{data['status']}'
                 )         
             """
         await cursor.execute(sql)
