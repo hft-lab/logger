@@ -12,11 +12,8 @@ class InsertFunding:
         self.app = app
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
 
-    async def get_last_20_records(self):
-        async with self.app['db'].acquire() as cursor:
-            query = 'SELECT * FROM fundings ORDER BY id DESC LIMIT 5'
-            records = await cursor.fetch(query)
-            return records, cursor
+    async def get_last_20_records(self, cursor):
+        return await cursor.fetch('SELECT * FROM fundings ORDER BY id DESC LIMIT 5')
 
     async def run(self, payload: dict) -> None:
         """
@@ -35,10 +32,11 @@ class InsertFunding:
         :return: None
         """
         logger.info(f"Start: {self.worker_name}")
-        records, cursor = await self.get_last_20_records()
-        for record in records:
-            if record[2] < payload['ts'] and record[4] == payload['exchange']:
-                await self.__insert(payload, cursor)
+        async with self.app['db'].acquire() as cursor:
+            for record in await self.get_last_20_records(cursor):
+                if record['ts'] < payload['ts'] and record['exchange'] == payload['exchange']:
+                    logger.info(f"INSERT: {payload}")
+                    await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
 
     @staticmethod
