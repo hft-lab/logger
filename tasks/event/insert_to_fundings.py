@@ -30,9 +30,11 @@ class InsertFunding:
         """
         logger.info(f"Start: {self.worker_name}")
         async with self.app['db'].acquire() as cursor:
-            query = f"SELECT * FROM fundings WHERE ts = %s AND exchange = %s"
-            find = cursor.execute(query, (payload['ts'], payload['exchange']))
-            if not find:
+            query = f"SELECT COUNT(*) FROM fundings WHERE ts = %s AND exchange = %s"
+            cursor.execute(query, (payload['ts'], payload['exchange']))
+            count = cursor.fetchone()[0]
+            print(f"------------------------COUNT: {count}")
+            if count == 0:
                 logger.info(f"INSERT: {payload}")
                 await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
