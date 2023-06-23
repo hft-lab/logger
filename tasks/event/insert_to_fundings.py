@@ -12,9 +12,9 @@ class InsertFunding:
         self.app = app
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
 
-    async def get_last_5_records(self):
+    async def get_last_20_records(self):
         async with self.app['db'].acquire() as connection:
-            query = 'SELECT * FROM table_name ORDER BY id DESC LIMIT 5'
+            query = 'SELECT * FROM fundings ORDER BY id DESC LIMIT 5'
             records = await connection.fetch(query)
             return records
 
@@ -34,13 +34,11 @@ class InsertFunding:
                     11. price,
         :return: None
         """
-
         logger.info(f"Start: {self.worker_name}")
-        async with self.app['db'].acquire() as cursor:
-            records = await cursor.fetch('SELECT * FROM table_name ORDER BY id DESC LIMIT 20')
-            for record in records:
-                if record[2] < payload['ts'] and record[4] == payload['exchange']:
-                    await self.__insert(payload, cursor)
+        records = await self.get_last_20_records()
+        for record in records:
+            if record[2] < payload['ts'] and record[4] == payload['exchange']:
+                await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
 
     @staticmethod
