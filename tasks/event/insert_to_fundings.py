@@ -13,10 +13,10 @@ class InsertFunding:
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
 
     async def get_last_20_records(self):
-        async with self.app['db'].acquire() as connection:
+        async with self.app['db'].acquire() as cursor:
             query = 'SELECT * FROM fundings ORDER BY id DESC LIMIT 5'
-            records = await connection.fetch(query)
-            return records
+            records = await cursor.fetch(query)
+            return records, cursor
 
     async def run(self, payload: dict) -> None:
         """
@@ -35,7 +35,7 @@ class InsertFunding:
         :return: None
         """
         logger.info(f"Start: {self.worker_name}")
-        records = await self.get_last_20_records()
+        records, cursor = await self.get_last_20_records()
         for record in records:
             if record[2] < payload['ts'] and record[4] == payload['exchange']:
                 await self.__insert(payload, cursor)
