@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class OrderStatuses:
-    SUCCESS = ['Delayed Fully Executed', 'Instant Fully Executed']
+    SUCCESS = 'Fully Executed'
     UNSUCCESS = 'Not Executed'
 
 class DisbalanceStatuses:
@@ -74,9 +74,9 @@ class CheckAndUpdateDisbalances:
             for row in data:
                 if row['status'] == 'Processing':
                     in_processing = True
-                elif row['status'] in OrderStatuses.SUCCESS:
+                elif row['status'] == OrderStatuses.SUCCESS:
                     else_statuses.append(True)
-                elif row['status'] in OrderStatuses.UNSUCCESS:
+                elif row['status'] == OrderStatuses.UNSUCCESS:
                     else_statuses.append(False)
 
             if not in_processing and all(else_statuses):
