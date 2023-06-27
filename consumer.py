@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 TASKS = {
     'logger.event.insert_ping_logger': InsertToPingLogging,
-    'logger.event.send_message': Telegram,
+    'logger.event.send_to_telegram': Telegram,
     'logger.event.insert_balance_jumps': InsertToBalanceJumps,
     'logger.event.insert_deals_reports': InsertToDealsReports,
     'logger.event.insert_balance_check': InsertToBalanceCheck,
@@ -45,7 +45,7 @@ TASKS = {
     'logger.event.insert_balance_detalization': InsertToBalanceDetalization,
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
-    'logger.event.insert_funding': InsertFunding,
+    'logger.event.insert_funding': InsertFunding
 
     'logger.periodic.check_and_update_arbitrage_possibilities': CheckAndUpdateArbitragePossibilities,
     'logger.periodic.check_and_update_disbalances': CheckAndUpdateDisbalances,
