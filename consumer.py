@@ -45,7 +45,7 @@ TASKS = {
     'logger.event.insert_balance_detalization': InsertToBalanceDetalization,
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
-    'logger.event.insert_funding': InsertFunding
+    'logger.event.insert_funding': InsertFunding,
 
     'logger.periodic.check_and_update_arbitrage_possibilities': CheckAndUpdateArbitragePossibilities,
     'logger.periodic.check_and_update_disbalances': CheckAndUpdateDisbalances,

@@ -1,6 +1,6 @@
 import logging
 from logging.config import dictConfig
-from send_to_telegram import Telegram
+from tasks.event.send_to_telegram import Telegram
 
 from config import Config
 
