@@ -28,12 +28,26 @@ class Telegram:
 
 
 if __name__ == '__main__':
-    worker = Telegram({})
-    loop = asyncio.get_event_loop()
+    from aio_pika import connect_robust
+    from aiohttp.web import Application
 
-    try:
-        loop.run_until_complete(worker.run({}))
-    except Exception as e:
-        print(e)
-    finally:
-        loop.close()
+    async def connect_to_rabbit():
+        app['mq'] = await connect_robust(rabbit_url, loop=loop)
+
+    rabbit_url = f"amqp://{Config.RABBIT['username']}:{Config.RABBIT['password']}@{Config.RABBIT['host']}:{Config.RABBIT['port']}/"  # noqa
+    app = Application()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(connect_to_rabbit())
+    worker = Telegram(app)
+    loop.run_until_complete(worker.run({'bot_token': '6037890725:AAHSKzK9aazvOYU2AiBSDO8ZLE5bJaBNrBw',
+                                        'chat_id': -807300930,
+                                        'msg': 'TEST'}))
+
+
+
+
+
+
+
+
+
