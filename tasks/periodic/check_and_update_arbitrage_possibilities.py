@@ -2,6 +2,7 @@ import datetime
 import logging
 import time
 from logging.config import dictConfig
+from tasks.event.send_to_telegram import Telegram
 
 from config import Config
 from core.rabbit_mq import publish_message
@@ -31,6 +32,7 @@ class CheckAndUpdateArbitragePossibilities:
         self.worker_name = 'CHECK_AND_UPDATE_ARBITRAGE_POSSIBILITIES'
         self.all_arbitrage_possibilities = []
         self.arbitrage_possibilities_to_update = []
+        self.telegram = Telegram(app)
 
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
@@ -45,28 +47,29 @@ class CheckAndUpdateArbitragePossibilities:
     async def __get_all_processing_arbitrage_possibilities_ids(self, cursor):
         sql = """
         select 
-            id
+            *
         from 
            arbitrage_possibilities
         where 
-            status = 'Processing' 
+            status = 'Processing'
         order by
             ts desc
         """
 
-        self.all_arbitrage_possibilities = [x['id'] for x in await cursor.fetch(sql)]
+        self.all_arbitrage_possibilities = [x for x in await cursor.fetch(sql)]
 
     async def __get_orders_by_parent_id(self, cursor):
-        for parent_id in self.all_arbitrage_possibilities:
+        for possibility in self.all_arbitrage_possibilities:
             sql = f"""
             select 
-                status
+                *
             from
                 orders
             where 
-                parent_id = '{parent_id}'
+                parent_id = '{possibility["id"]}'
             """
 
+            parent_id = possibility["id"]
             data = await cursor.fetch(sql)
             in_processing = False
             else_statuses = []
@@ -106,6 +109,7 @@ class CheckAndUpdateArbitragePossibilities:
                         'status_ts': time.time()
                     }
                 )
+            await self.prepare_and_send_message_to_tg(data, possibility)
 
     async def __update_arbitrage_possibilities(self, cursor):
         for data in self.arbitrage_possibilities_to_update:
@@ -122,6 +126,49 @@ class CheckAndUpdateArbitragePossibilities:
 
             await cursor.execute(sql)
             await self.__publish_message(data['id'])
+            await self.prepare_and_send_message_to_tg(data)
+
+    async def prepare_and_send_message_to_tg(self, data, possibility):
+        if len(data) == 2:
+            sell_order = [x for x in data if x['side'] == 'sell'][0]
+            buy_order = [x for x in data if x['side'] == 'buy'][0]
+            status = 'Unsuccessful'
+            if sell_order['status'] == OrderStatuses.SUCCESS and buy_order['status'] == OrderStatuses.SUCCESS:
+                status = 'Success'
+            factual_size_coin = min([sell_order['factual_amount_coin'], buy_order['factual_amount_coin']])
+            factual_size_usd = min([sell_order['factual_amount_usd'], buy_order['factual_amount_usd']])
+            disbalance_coin = buy_order['expect_amount_coin'] - factual_size_coin
+            disbalance_usd = buy_order['expect_amount_usd'] - factual_size_usd
+            profit = (sell_order['factual_price'] - buy_order['factual_price']) / buy_order['factual_price']
+            profit_with_fees = profit - sell_order['factual_fee'] - buy_order['factual_fee']
+
+            message = f"TAKER ORDER EXECUTED\n"
+            message += f"{sell_order['exchange']}- | {buy_order['exchange']}+\n"
+            message += f"ENV: {sell_order['env']}\n"
+            message += f"DEAL STATUS: {status}\n"
+            message += f"DEAL TIME: {buy_order['datetime']}\n"
+            message += f"SELL PX: {sell_order['factual_price']}\n"
+            message += f"EXPECTED SELL PX: {sell_order['expect_price']}\n"
+            message += f"BUY PX: {buy_order['factual_price']}\n"
+            message += f"EXPECTED BUY PX: {buy_order['expect_price']}\n"
+            message += f"DEAL SIZE: {factual_size_coin}\n"
+            message += f"DEAL SIZE, USD: {factual_size_usd}\n"
+            message += f"DISBALANCE: {disbalance_coin}\n"
+            message += f"DISBALANCE, USD: {disbalance_usd}\n"
+            message += f"PROFIT REL, %: {profit_with_fees * 100}\n"
+            message += f"PROFIT ABS, USD: {profit_with_fees * factual_size_usd}\n"
+            message += f"FEE SELL, %: {sell_order['factual_fee'] * 100}\n"
+            message += f"FEE BUY, %: {buy_order['factual_fee'] * 100}\n"
+
+        else:
+            message = f"***** AP {possibility['id']} has less than two orders in DB *****"
+
+        telegram_input = {
+            'chat_id': possibility['chat_id'],
+            'bot_token': possibility['bot_token'],
+            'msg': message
+        }
+        await self.telegram.run(telegram_input)
 
     async def __publish_message(self, id):
         message = {

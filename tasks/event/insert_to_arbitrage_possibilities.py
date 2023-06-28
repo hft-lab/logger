@@ -1,6 +1,5 @@
 import logging
 from logging.config import dictConfig
-from tasks.event.send_to_telegram import Telegram
 
 from config import Config
 
@@ -16,7 +15,6 @@ class InsertToArbitragePossibilities:
     def __init__(self, app):
         self.app = app
         self.worker_name = 'INSERT_TO_ARBITRAGE_POSSIBILITIES'
-        self.telegram = Telegram(app)
 
     async def run(self, payload: dict) -> None:
         """
@@ -117,37 +115,6 @@ class InsertToArbitragePossibilities:
                 )         
             """
         await cursor.execute(sql)
-        await self.prepare_and_send_message_to_tg(data)
-
-    async def prepare_and_send_message_to_tg(self, data):
-        message = f"TAKER ORDER EXECUTED\n{data['sell_exch']}- | {data['buy_exch']}+\n"
-        message += f"ENV: {data['env']}\n"
-        message += f"DEAL STATUS: {data['status']}\n"
-        message += f"PARSE TIME, SEC: {data['time_parser']}\n"
-        message += f"CHOOSE DEAL TIME, SEC: {data['time_choose']}\n"
-        message += f"TIME: {data['datetime']} \n"
-        message += f"SELL PX: {data['sell_px']}\n"
-        message += f"EXPECTED SELL PX: {data['expect_sell_px']}\n"
-        message += f"BUY PX: {data['buy_px']}\n"
-        message += f"EXPECTED BUY PX: {data['expect_buy_px']}\n"
-        message += f"DEAL SIZE: {data['expect_amount']}\n"
-        message += f"DEAL SIZE, USD: {data['expect_amount_usd']}\n"
-        message += f"EXPECTED PROFIT REL, %: {data['expect_profit_relative'] * 100}\n"
-        message += f"EXPECTED PROFIT ABS, USD: {data['expect_profit_usd']}\n"
-        message += f"FEE SELL, %: {data['expect_fee_sell'] * 100}\n"
-        message += f"FEE BUY, %: {data['expect_fee_buy'] * 100}\n"
-
-        if data['buy_px'] == 0:
-            message += f"WARNING! {data['buy_exch']} CLIENT DOESN'T CREATE ORDERS"
-        elif data['sell_px'] == 0:
-            message += f"WARNING! {data['sell_exch']} CLIENT DOESN'T CREATE ORDERS"
-
-        telegram_input = {
-            'chat_id': data['chat_id'],
-            'bot_token': data['bot_token'],
-            'msg': message
-        }
-        await self.telegram.run(telegram_input)
 
 
 
