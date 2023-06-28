@@ -39,7 +39,7 @@ class CheckOrders:
         order by 
             ts desc
         limit 
-            15
+            3
         """
 
         if data := await cursor.fetch(sql):
