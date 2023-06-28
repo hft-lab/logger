@@ -57,7 +57,7 @@ services:
     command:
       - '/bin/sh'
       - '-c'
-      - '/bin/sleep 10 && python consumer.py -q logger.event.send_message'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.send_to_telegram'
 
   insert_balancing_reports:
     logging:
