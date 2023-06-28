@@ -56,20 +56,19 @@ class CheckAndUpdateArbitragePossibilities:
             ts desc
         """
 
-        self.all_arbitrage_possibilities = [x for x in await cursor.fetch(sql)]
+        self.all_arbitrage_possibilities = await cursor.fetch(sql)
 
     async def __get_orders_by_parent_id(self, cursor):
         for possibility in self.all_arbitrage_possibilities:
+            parent_id = possibility["id"]
             sql = f"""
             select 
                 *
             from
                 orders
             where 
-                parent_id = '{possibility["id"]}'
+                parent_id = '{parent_id}'
             """
-
-            parent_id = possibility["id"]
             data = await cursor.fetch(sql)
             in_processing = False
             else_statuses = []
@@ -88,7 +87,9 @@ class CheckAndUpdateArbitragePossibilities:
                         'id': parent_id,
                         'status': ArbitragePossibilitiesStatuses.SUCCESS,
                         'status_datetime': datetime.datetime.utcnow(),
-                        'status_ts': time.time()
+                        'status_ts': time.time(),
+                        'possibility': possibility,
+                        'orders': data
                     }
                 )
             elif not in_processing and any(else_statuses):
@@ -97,7 +98,9 @@ class CheckAndUpdateArbitragePossibilities:
                         'id': parent_id,
                         'status': ArbitragePossibilitiesStatuses.DISBALANCE,
                         'status_datetime': datetime.datetime.utcnow(),
-                        'status_ts': time.time()
+                        'status_ts': time.time(),
+                        'possibility': possibility,
+                        'orders': data
                     }
                 )
             elif not in_processing and not all(else_statuses):
@@ -106,10 +109,12 @@ class CheckAndUpdateArbitragePossibilities:
                         'id': parent_id,
                         'status': ArbitragePossibilitiesStatuses.UNSUCCESS,
                         'status_datetime': datetime.datetime.utcnow(),
-                        'status_ts': time.time()
+                        'status_ts': time.time(),
+                        'possibility': possibility,
+                        'orders': data
+
                     }
                 )
-            await self.prepare_and_send_message_to_tg(data, possibility)
 
     async def __update_arbitrage_possibilities(self, cursor):
         for data in self.arbitrage_possibilities_to_update:
@@ -126,7 +131,7 @@ class CheckAndUpdateArbitragePossibilities:
 
             await cursor.execute(sql)
             await self.__publish_message(data['id'])
-            await self.prepare_and_send_message_to_tg(data)
+            await self.prepare_and_send_message_to_tg(data['orders'], data['possibility'])
 
     async def prepare_and_send_message_to_tg(self, data, possibility):
         if len(data) == 2:
@@ -146,19 +151,19 @@ class CheckAndUpdateArbitragePossibilities:
             message += f"{sell_order['exchange']}- | {buy_order['exchange']}+\n"
             message += f"ENV: {sell_order['env']}\n"
             message += f"DEAL STATUS: {status}\n"
-            message += f"DEAL TIME: {buy_order['datetime']}\n"
+            message += f"DEAL TIME: {str(buy_order['datetime']).split('.')[0]}\n"
             message += f"SELL PX: {sell_order['factual_price']}\n"
             message += f"EXPECTED SELL PX: {sell_order['expect_price']}\n"
             message += f"BUY PX: {buy_order['factual_price']}\n"
             message += f"EXPECTED BUY PX: {buy_order['expect_price']}\n"
-            message += f"DEAL SIZE: {factual_size_coin}\n"
-            message += f"DEAL SIZE, USD: {factual_size_usd}\n"
-            message += f"DISBALANCE: {disbalance_coin}\n"
-            message += f"DISBALANCE, USD: {disbalance_usd}\n"
-            message += f"PROFIT REL, %: {profit_with_fees * 100}\n"
-            message += f"PROFIT ABS, USD: {profit_with_fees * factual_size_usd}\n"
-            message += f"FEE SELL, %: {sell_order['factual_fee'] * 100}\n"
-            message += f"FEE BUY, %: {buy_order['factual_fee'] * 100}\n"
+            message += f"DEAL SIZE: {round(factual_size_coin, 3)}\n"
+            message += f"DEAL SIZE, USD: {round(factual_size_usd, 3)}\n"
+            message += f"DISBALANCE: {round(disbalance_coin, 3)}\n"
+            message += f"DISBALANCE, USD: {round(disbalance_usd, 3)}\n"
+            message += f"PROFIT REL, %: {round(profit_with_fees * 100, 3)}\n"
+            message += f"PROFIT ABS, USD: {round(profit_with_fees * factual_size_usd, 3)}\n"
+            message += f"FEE SELL, %: {round(sell_order['factual_fee'] * 100, 3)}\n"
+            message += f"FEE BUY, %: {round(buy_order['factual_fee'] * 100, 3)}\n"
 
         else:
             message = f"***** AP {possibility['id']} has less than two orders in DB *****"
