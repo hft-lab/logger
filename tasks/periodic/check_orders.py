@@ -41,7 +41,7 @@ class CheckOrders:
         limit 
             3
         """
-        '''TEST COMMIT'''
+
         if data := await cursor.fetch(sql):
             for order in data:
                 SYMBOL = 'BTCUSD' if order['symbol'] in self.SYMBOLS else 'ETHUSD'
