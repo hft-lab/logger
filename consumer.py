@@ -80,10 +80,6 @@ class Consumer:
             logger.info("Single work option")
             self.periodic_tasks.append(self.loop.create_task(self._consume(self.app['mq'], self.queue)))
 
-        else:
-            logger.info("Multiple work option")
-            for queue_name in TASKS:
-                self.periodic_tasks.append(self.loop.create_task(self._consume(self.app['mq'], queue_name)))
 
     async def setup_db(self) -> None:
         self.app['db'] = await asyncpg.create_pool(**Config.POSTGRES)
