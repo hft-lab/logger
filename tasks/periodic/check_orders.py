@@ -7,12 +7,12 @@ from core.rabbit_mq import publish_message
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
 
-class CheckOrders:
-    ROUTING_KEY = 'logger.event_{}.get_orders_results'
-    EXCHANGE_NAME = 'logger.event_{}'
-    QUEUE_NAME = 'logger.event_{}.get_orders_results'
 
-    SYMBOLS = ['BTC-USD', 'BTCUSDT', 'XBTUSD']
+class CheckOrders:
+    ROUTING_KEY = 'logger.event.get_orders_results'
+    EXCHANGE_NAME = 'logger.event'
+    QUEUE_NAME = 'logger.event.get_orders_results'
+
 
     def __init__(self, app):
         self.app = app
@@ -43,18 +43,18 @@ class CheckOrders:
         """
 
         if data := await cursor.fetch(sql):
+            messages = []
             for order in data:
-                SYMBOL = 'BTCUSD' if order['symbol'] in self.SYMBOLS else 'ETHUSD'
-                await publish_message(
-                    connection=self.app['mq'],
-                    message= {
+                messages.append({
+                        'symbol': order['symbol'],
                         'order_ids': order['orders_ids'],
                         'exchange': order['exchange']
-                    },
-                    exchange_name=self.EXCHANGE_NAME.format(SYMBOL),
-                    routing_key=self.ROUTING_KEY.format(SYMBOL),
-                    queue_name=self.QUEUE_NAME.format(SYMBOL)
+                    })
+
+            await publish_message(
+                    connection=self.app['mq'],
+                    message=messages,
+                    exchange_name=self.EXCHANGE_NAME,
+                    routing_key=self.ROUTING_KEY,
+                    queue_name=self.QUEUE_NAME
                 )
-
-
-
