@@ -279,6 +279,26 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_funding'
 
+  insert_bot_config:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    build:
+      context: .
+      dockerfile: "dockerfiles/Dockerfile.workers"
+    env_file:
+      - .env
+    depends_on:
+      - migrate
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - '/bin/sh'
+      - '-c'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_bot_config'
+
   producer:
     logging:
       driver: "json-file"
