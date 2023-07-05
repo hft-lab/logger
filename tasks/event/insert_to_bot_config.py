@@ -44,7 +44,7 @@ class InsertToBotConfig:
                     order_delay,
                     max_order_usd,
                     max_leverage,
-                    profit_taker
+                    target_profit
                 )
             values(
                     '{data['id']}',
