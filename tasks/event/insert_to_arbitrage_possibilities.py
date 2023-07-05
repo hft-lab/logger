@@ -84,7 +84,6 @@ class InsertToArbitragePossibilities:
                     time_choose,
                     chat_id,
                     bot_token,
-                    shift,
                     status
                 )
             values(
@@ -110,7 +109,6 @@ class InsertToArbitragePossibilities:
                      {data['time_choose']},
                      '{data['chat_id']}',
                      '{data['bot_token']}',
-                     {data['shift']},
                      '{data['status']}'
                 )         
             """

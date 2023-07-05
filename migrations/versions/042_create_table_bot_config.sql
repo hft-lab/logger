@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS bot_config (
 	exchange_2 VARCHAR(64) NOT NULL,
 	coin VARCHAR(64) NOT NULL,
 	env VARCHAR(64) NOT NULL,
+	target_profit FLOAT NOT NULL,
 	fee_exchange_1 FLOAT NOT NULL,
 	fee_exchange_2 FLOAT NOT NULL,
 	shift FLOAT NOT NULL,
