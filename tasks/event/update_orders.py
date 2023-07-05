@@ -22,7 +22,8 @@ class UpdateOrders:
     @staticmethod
     async def __update(payload, cursor):
         if len(str(payload['ts_update'])) > 11:
-            payload['ts_update'] = int(round(float(payload['ts_update']) / 1000))
+            payload['ts_update'] = int(round(float(payload['ts_update']) / 1000))  # TODO refactor this
+
         sql = f"""
         update 
             orders
@@ -32,7 +33,7 @@ class UpdateOrders:
             factual_amount_coin = {payload['factual_amount_coin']},
             factual_amount_usd = {payload['factual_amount_usd']},
             datetime_update = '{payload['datetime_update']}',
-            ts_update = {(float(payload['ts_update']) / 1000)}
+            ts_update = {payload['ts_update']}
         where 
             exchange = '{payload['exchange']}' and 
             exchange_order_id = '{payload['exchange_order_id']}'
