@@ -43,7 +43,8 @@ class InsertToBotConfig:
                     shift,
                     order_delay,
                     max_order_usd,
-                    max_leverage
+                    max_leverage,
+                    profit_taker
                 )
             values(
                     '{data['id']}',
@@ -58,7 +59,8 @@ class InsertToBotConfig:
                      {data['shift']},
                      {data['order_delay']},
                      {data['max_order_usd']},
-                     {data['max_leverage']}
+                     {data['max_leverage']},
+                     {data['profit_taker']}
                 )         
             """
         await cursor.execute(sql)
