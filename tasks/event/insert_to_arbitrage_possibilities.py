@@ -84,7 +84,8 @@ class InsertToArbitragePossibilities:
                     time_choose,
                     chat_id,
                     bot_token,
-                    status
+                    status,
+                    bot_launch_id
                 )
             values(
                     '{data['id']}',
@@ -109,7 +110,8 @@ class InsertToArbitragePossibilities:
                      {data['time_choose']},
                      '{data['chat_id']}',
                      '{data['bot_token']}',
-                     '{data['status']}'
+                     '{data['status']}',
+                     '{data['bot_launch_id']}'
                 )         
             """
         await cursor.execute(sql)
