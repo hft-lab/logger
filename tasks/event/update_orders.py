@@ -6,6 +6,7 @@ from config import Config
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
 
+
 class UpdateOrders:
 
     def __init__(self, app):
@@ -18,8 +19,10 @@ class UpdateOrders:
             await self.__update(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
 
-
-    async def __update(self, payload, cursor):
+    @staticmethod
+    async def __update(payload, cursor):
+        if len(str(payload['ts_update'])) > 11:
+            payload['ts_update'] = int(round(float(payload['ts_update']) / 1000))
         sql = f"""
         update 
             orders
@@ -29,7 +32,7 @@ class UpdateOrders:
             factual_amount_coin = {payload['factual_amount_coin']},
             factual_amount_usd = {payload['factual_amount_usd']},
             datetime_update = '{payload['datetime_update']}',
-            ts_update = {payload['ts_update']}
+            ts_update = {(float(payload['ts_update']) / 1000)}
         where 
             exchange = '{payload['exchange']}' and 
             exchange_order_id = '{payload['exchange_order_id']}'
