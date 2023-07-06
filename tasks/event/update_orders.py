@@ -20,10 +20,7 @@ class UpdateOrders:
         logger.info(f"Finish: {self.worker_name}")
 
     @staticmethod
-    async def __update(payload, cursor):
-        if len(str(payload['ts_update'])) > 11:
-            payload['ts_update'] = int(round(float(payload['ts_update']) / 1000))  # TODO refactor this
-
+    async def __update(payload, cursor) -> None:
         sql = f"""
         update 
             orders
@@ -38,4 +35,5 @@ class UpdateOrders:
             exchange = '{payload['exchange']}' and 
             exchange_order_id = '{payload['exchange_order_id']}'
         """
+
         await cursor.execute(sql)
