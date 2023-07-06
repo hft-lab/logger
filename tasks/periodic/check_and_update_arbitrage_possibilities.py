@@ -138,13 +138,20 @@ class CheckAndUpdateArbitragePossibilities:
             sell_order = [x for x in data if x['side'] == 'sell'][0]
             buy_order = [x for x in data if x['side'] == 'buy'][0]
             status = 'Unsuccessful'
+
             if sell_order['status'] == OrderStatuses.SUCCESS and buy_order['status'] == OrderStatuses.SUCCESS:
                 status = 'Success'
+
             factual_size_coin = min([sell_order['factual_amount_coin'], buy_order['factual_amount_coin']])
             factual_size_usd = min([sell_order['factual_amount_usd'], buy_order['factual_amount_usd']])
             disbalance_coin = buy_order['expect_amount_coin'] - factual_size_coin
             disbalance_usd = buy_order['expect_amount_usd'] - factual_size_usd
-            profit = (sell_order['factual_price'] - buy_order['factual_price']) / buy_order['factual_price']
+
+            try:
+                profit = (sell_order['factual_price'] - buy_order['factual_price']) / buy_order['factual_price']
+            except ZeroDivisionError:
+                profit = 0
+
             profit_with_fees = profit - sell_order['factual_fee'] - buy_order['factual_fee']
 
             message = f"TAKER ORDER EXECUTED\n"
