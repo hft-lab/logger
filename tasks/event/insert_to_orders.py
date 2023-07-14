@@ -46,8 +46,25 @@ class InsertToOrders:
 
         logger.info(f"Start: {self.worker_name}")
         async with self.app['db'].acquire() as cursor:
-            await self.__insert(payload, cursor)
+            if not await self.__select(payload, cursor):
+                await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
+
+
+    @staticmethod
+    async def __select(data: dict, cursor):
+        sql = f"""
+        select 
+            *
+        from 
+            orders
+        where 
+            exchange_order_id = '{data['exchange_order_id']}'
+        """
+
+        return await cursor.fetch(sql)
+
+
 
     @staticmethod
     async def __insert(data: dict, cursor) -> None:
