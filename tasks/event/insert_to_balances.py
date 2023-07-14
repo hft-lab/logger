@@ -37,8 +37,23 @@ class InsertToBalances:
 
         logger.info(f"Start: {self.worker_name}")
         async with self.app['db'].acquire() as cursor:
-            await self.__insert(payload, cursor)
+            if not 4 >= await self.__select(payload, cursor):
+                await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
+
+    @staticmethod
+    async def __select(data: dict, cursor) -> int:
+        sql = f"""
+        select 
+            count(*)
+        from 
+            orders
+        where 
+            parent_id = '{data['parent_id']}'
+        """
+        res = await cursor.fetch(sql)
+
+        return res['count']
 
     @staticmethod
     async def __insert(data: dict, cursor) -> None:
