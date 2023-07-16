@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS bot_config (
 	max_order_usd FLOAT NOT NULL,
 	max_leverage FLOAT NOT NULL,
 	pause_flag INT DEFAULT NULL,
-	api_secret_encrypted VARCHAR(64) NOT NULL,
+	api_secret_encrypted VARCHAR(64) NOT NULL
 );
