@@ -1,0 +1,1 @@
+ALTER TABLE bot_config RENAME TO bot_launches;

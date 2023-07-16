@@ -7,14 +7,14 @@ dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
 
 
-class InsertToBotConfig:
+class InsertToBotLaunches:
     """
-    Class for insert to bot_config table
+    Class for insert to bot_launches table
     """
 
     def __init__(self, app):
         self.app = app
-        self.worker_name = 'INSERT_TO_BOT_CONFIG'
+        self.worker_name = 'INSERT_TO_BOT_LAUNCHES'
 
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
@@ -24,13 +24,13 @@ class InsertToBotConfig:
 
     async def __insert(self, data: dict, cursor) -> None:
         """
-        Insert data to bot_config table
+        Insert data to bot_launches table
         :param data: dict with NOT NULL keys
         :param cursor: asyncpg cursor
         :return: None
         """
         sql = f"""
-            insert into bot_config(
+            insert into bot_launches(
                     id,
                     datetime,
                     ts,

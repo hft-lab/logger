@@ -14,7 +14,7 @@ from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossi
 from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization
 from tasks.event.insert_to_balance_jumps import InsertToBalanceJumps
 from tasks.event.insert_to_balances import InsertToBalances
-from tasks.event.insert_to_bot_config import InsertToBotConfig
+from tasks.event.insert_to_bot_launces import InsertToBotLaunches
 from tasks.event.insert_to_disbalances import InsertToDisbalance
 from tasks.event.insert_to_fundings import InsertFunding
 from tasks.event.insert_to_orders import InsertToOrders
@@ -41,7 +41,7 @@ TASKS = {
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
     'logger.event.insert_funding': InsertFunding,
-    'logger.event.insert_bot_config': InsertToBotConfig,
+    'logger.event.insert_bot_launches': InsertToBotLaunches,
 
     'logger.periodic.check_and_update_arbitrage_possibilities': CheckAndUpdateArbitragePossibilities,
     'logger.periodic.check_and_update_disbalances': CheckAndUpdateDisbalances,
