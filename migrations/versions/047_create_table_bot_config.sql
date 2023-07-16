@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS bot_config (
     id UUID NOT NULL UNIQUE,
     datetime timestamptz NOT NULL,
 	ts BIGINT NOT NULL,
-	context context_enum NOT NULL,,
+	context context_enum NOT NULL,
 	exchange_1 VARCHAR(64) NOT NULL,
 	exchange_2 VARCHAR(64) NOT NULL,
 	coin VARCHAR(64) NOT NULL,
