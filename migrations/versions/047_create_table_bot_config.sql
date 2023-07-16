@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS bot_config (
 	exchange_2 VARCHAR(64) NOT NULL,
 	coin VARCHAR(64) NOT NULL,
 	bots_quantity INT NOT NULL,
-	shift_use_flagINT NOT NULL,
+	shift_use_flag INT NOT NULL,
 	target_profit FLOAT NOT NULL,
 	order_delay FLOAT NOT NULL,
 	max_order_usd FLOAT NOT NULL,
