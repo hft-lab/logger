@@ -14,13 +14,13 @@ from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossi
 from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization
 from tasks.event.insert_to_balance_jumps import InsertToBalanceJumps
 from tasks.event.insert_to_balances import InsertToBalances
-from tasks.event.insert_to_bot_launces import InsertToBotLaunches
 from tasks.event.insert_to_disbalances import InsertToDisbalance
 from tasks.event.insert_to_fundings import InsertFunding
 from tasks.event.insert_to_orders import InsertToOrders
 from tasks.event.insert_to_ping_logger import InsertToPingLogging
 from tasks.event.send_to_telegram import Telegram
 from tasks.event.update_orders import UpdateOrders
+from tasks.event.update_to_bot_launches import UpdateBotLaunches
 from tasks.periodic.check_and_update_arbitrage_possibilities import CheckAndUpdateArbitragePossibilities
 from tasks.periodic.check_and_update_disbalances import CheckAndUpdateDisbalances
 from tasks.periodic.check_orders import CheckOrders
@@ -41,7 +41,7 @@ TASKS = {
     'logger.event.insert_disbalances': InsertToDisbalance,
     'logger.event.update_orders': UpdateOrders,
     'logger.event.insert_funding': InsertFunding,
-    'logger.event.insert_bot_launches': InsertToBotLaunches,
+    'logger.event.update_bot_launches': UpdateBotLaunches,
 
     'logger.periodic.check_and_update_arbitrage_possibilities': CheckAndUpdateArbitragePossibilities,
     'logger.periodic.check_and_update_disbalances': CheckAndUpdateDisbalances,

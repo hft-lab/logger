@@ -279,7 +279,7 @@ services:
       - '-c'
       - '/bin/sleep 10 && python consumer.py -q logger.event.insert_funding'
 
-  insert_bot_launches:
+  update_bot_launches:
     logging:
       driver: "json-file"
       options:
@@ -297,7 +297,7 @@ services:
     command:
       - '/bin/sh'
       - '-c'
-      - '/bin/sleep 10 && python consumer.py -q logger.event.insert_bot_launches'
+      - '/bin/sleep 10 && python consumer.py -q logger.event.update_bot_launches'
 
   producer:
     logging:
