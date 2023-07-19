@@ -5,7 +5,7 @@ from logging.config import dictConfig
 from tasks.event.send_to_telegram import Telegram
 
 from config import Config
-from core.rabbit_mq import publish_message
+
 
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
@@ -130,7 +130,6 @@ class CheckAndUpdateArbitragePossibilities:
                     """
 
             await cursor.execute(sql)
-            await self.__publish_message(data['id'])
             await self.prepare_and_send_message_to_tg(data['orders'], data['possibility'])
 
     async def prepare_and_send_message_to_tg(self, data, possibility):
@@ -181,20 +180,3 @@ class CheckAndUpdateArbitragePossibilities:
             'msg': message
         }
         await self.telegram.run(telegram_input)
-
-    async def __publish_message(self, id):
-        message = {
-            'parent_id': str(id),
-            'context': 'post-deal',
-            'env': 'TOKYO_DEV',
-            'chat_id': -807300930,
-            'telegram_bot': '6037890725:AAHSKzK9aazvOYU2AiBSDO8ZLE5bJaBNrBw'
-        }
-        print(message)
-        await publish_message(
-            connection=self.app['mq'],
-            message=message,
-            exchange_name=self.EXCHANGE_NAME,
-            routing_key=self.ROUTING_KEY,
-            queue_name=self.QUEUE_NAME
-        )

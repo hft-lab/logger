@@ -4,7 +4,7 @@ import time
 from logging.config import dictConfig
 
 from config import Config
-from core.rabbit_mq import publish_message
+
 
 dictConfig(Config.LOGGING)
 logger = logging.getLogger(__name__)
@@ -121,21 +121,3 @@ class CheckAndUpdateDisbalances:
                     """
 
             await cursor.execute(sql)
-            await self.__publish_message(data['id'])
-
-    async def __publish_message(self, id):
-        message = {
-            'parent_id': str(id),
-            'context': 'post-balancing',
-            'env': 'TOKYO_DEV',
-            'chat_id': -807300930,
-            'telegram_bot': '6037890725:AAHSKzK9aazvOYU2AiBSDO8ZLE5bJaBNrBw'
-        }
-
-        await publish_message(
-            connection=self.app['mq'],
-            message=message,
-            exchange_name=self.EXCHANGE_NAME,
-            routing_key=self.ROUTING_KEY,
-            queue_name=self.QUEUE_NAME
-        )
