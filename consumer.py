@@ -106,7 +106,7 @@ class Consumer:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-q', nargs='?', const=True, dest='queue', default='logger.event.insert_funding')
+    parser.add_argument('-q', nargs='?', const=True, dest='queue', default='logger.event.update_bot_launches')
     args = parser.parse_args()
 
     loop = asyncio.get_event_loop()

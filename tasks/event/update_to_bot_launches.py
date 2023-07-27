@@ -27,7 +27,7 @@ class UpdateBotLaunches:
         to_update = ""
 
         for k, v in payload.items():
-            if k != 'launch_id':
+            if k != 'launch_id' and not v is None:
                 if isinstance(v, int):
                     v = v
                 elif isinstance(v, float):

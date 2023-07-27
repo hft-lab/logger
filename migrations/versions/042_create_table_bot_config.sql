@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS bot_config (
 	fee_exchange_1 FLOAT,
 	fee_exchange_2 FLOAT,
 	shift FLOAT,
-	order_delay FLOAT,
+	orders_delay FLOAT,
 	max_order_usd FLOAT,
 	max_leverage FLOAT
 );
