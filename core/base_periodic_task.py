@@ -2,9 +2,11 @@ import asyncio
 
 import asyncpg
 from aio_pika import connect_robust
-
-from config import Config
 from core.rabbit_mq import publish_message
+import configparser
+import sys
+config = configparser.ConfigParser()
+config.read(sys.argv[1], "utf-8")
 
 
 class BasePeriodicTask:
@@ -21,8 +23,8 @@ class BasePeriodicTask:
         self.db = None
         self.mq = None
         self.data = None
-
-        self.rabbit_url = f"amqp://{Config.RABBIT['username']}:{Config.RABBIT['password']}@{Config.RABBIT['host']}:{Config.RABBIT['port']}/"  # noqa
+        rabbit = config['RABBIT']
+        self.rabbit_url = f"amqp://{rabbit['USERNAME']}:{rabbit['PASSWORD']}@{rabbit['HOST']}:{rabbit['PORT']}/"
 
     async def run(self) -> None:
         """
@@ -39,12 +41,15 @@ class BasePeriodicTask:
             self.cursor = cursor
             await self.get_data()
             await self.prepare_message()
-
-
         await self.db.close()
 
     async def connect_db(self) -> None:
-        self.db = await asyncpg.create_pool(**Config.POSTGRES)
+        self.db = await asyncpg.create_pool(**{'database': config['POSTGRES']['NAME'],
+                                               'user': config['POSTGRES']['USER'],
+                                               'password': config['POSTGRES']['PASSWORD'],
+                                               'host': config['POSTGRES']['HOST'],
+                                               'port': config['POSTGRES']['PORT'],
+                                               })
 
     async def connect_mq(self) -> None:
         loop = asyncio.get_event_loop()

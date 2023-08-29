@@ -4,19 +4,56 @@ import logging
 import orjson
 from aio_pika import connect, ExchangeType, Message
 
-from config import Config
+import configparser
+import sys
+config = configparser.ConfigParser()
+config.read(sys.argv[1], "utf-8")
 
 logger = logging.getLogger(__name__)
+
+SECOND = 1
+MINUTE = 60
+TEN_MINUTES = MINUTE * 10
+HOUR = MINUTE * 60
+DAY = HOUR * 24
+
+periodic_tasks = [
+        {
+            'exchange': 'logger.periodic',
+            'queue': 'logger.periodic.check_orders',
+            'routing_key': 'logger.periodic.check_orders',
+            'interval': MINUTE,
+            'delay': SECOND * 30,
+            'payload': {}
+        },
+        {
+            'exchange': 'logger.periodic',
+            'queue': 'logger.periodic.check_and_update_arbitrage_possibilities',
+            'routing_key': 'logger.periodic.check_and_update_arbitrage_possibilities',
+            'interval': SECOND * 5,
+            'delay': SECOND * 5,
+            'payload': {}
+        },
+        {
+            'exchange': 'logger.periodic',
+            'queue': 'logger.periodic.check_and_update_disbalances',
+            'routing_key': 'logger.periodic.check_and_update_disbalances',
+            'interval': SECOND * 5,
+            'delay': SECOND * 5,
+            'payload': {}
+        }
+    ]
 
 
 class WorkerProducer:
     def __init__(self, loop):
         self.loop = loop
-        self.rabbit_url = f"amqp://{Config.RABBIT['username']}:{Config.RABBIT['password']}@{Config.RABBIT['host']}:{Config.RABBIT['port']}/"
+        rabbit = config['RABBIT']
+        self.rabbit_url = f"amqp://{rabbit['USERNAME']}:{rabbit['PASSWORD']}@{rabbit['HOST']}:{rabbit['PORT']}/"
         self.periodic_tasks = []
 
     async def run(self):
-        for task in Config.PERIODIC_TASKS:
+        for task in periodic_tasks:
             self.periodic_tasks.append(self.loop.create_task(self._publishing_task(task)))
 
     async def _publishing_task(self, task):

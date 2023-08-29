@@ -3,7 +3,10 @@ import orjson
 
 import aiohttp
 
-from config import Config
+import configparser
+import sys
+config = configparser.ConfigParser()
+config.read(sys.argv[1], "utf-8")
 
 
 class Telegram:
@@ -34,7 +37,9 @@ if __name__ == '__main__':
     async def connect_to_rabbit():
         app['mq'] = await connect_robust(rabbit_url, loop=loop)
 
-    rabbit_url = f"amqp://{Config.RABBIT['username']}:{Config.RABBIT['password']}@{Config.RABBIT['host']}:{Config.RABBIT['port']}/"  # noqa
+
+    rabbit = config['RABBIT']
+    rabbit_url = f"amqp://{rabbit['USERNAME']}:{rabbit['PASSWORD']}@{rabbit['HOST']}:{rabbit['PORT']}/"
     app = Application()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(connect_to_rabbit())

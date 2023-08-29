@@ -9,7 +9,6 @@ import orjson
 from aio_pika import connect_robust
 from aiohttp.web import Application
 
-from config import Config
 from tasks.event.insert_to_arbitrage_possibilities import InsertToArbitragePossibilities
 from tasks.event.insert_to_balance_detalization import InsertToBalanceDetalization
 from tasks.event.insert_to_balance_jumps import InsertToBalanceJumps
@@ -25,7 +24,16 @@ from tasks.periodic.check_and_update_arbitrage_possibilities import CheckAndUpda
 from tasks.periodic.check_and_update_disbalances import CheckAndUpdateDisbalances
 from tasks.periodic.check_orders import CheckOrders
 
-dictConfig(Config.LOGGING)
+import configparser
+import sys
+config = configparser.ConfigParser()
+config.read(sys.argv[1], "utf-8")
+
+dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
+                'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
+            'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
+                'stream': 'ext://sys.stdout'}},
+            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 TASKS = {
@@ -58,7 +66,8 @@ class Consumer:
         self.app = Application()
         self.loop = loop
         self.queue = queue
-        self.rabbit_url = f"amqp://{Config.RABBIT['username']}:{Config.RABBIT['password']}@{Config.RABBIT['host']}:{Config.RABBIT['port']}/"  # noqa
+        rabbit = config['RABBIT']
+        self.rabbit_url = f"amqp://{rabbit['USERNAME']}:{rabbit['PASSWORD']}@{rabbit['HOST']}:{rabbit['PORT']}/"
         self.periodic_tasks = []
 
     async def run(self) -> None:
@@ -77,7 +86,13 @@ class Consumer:
             self.periodic_tasks.append(self.loop.create_task(self._consume(self.app['mq'], self.queue)))
 
     async def setup_db(self) -> None:
-        self.app['db'] = await asyncpg.create_pool(**Config.POSTGRES)
+        self.app['db'] = await asyncpg.create_pool(**{'database': config['POSTGRES']['NAME'],
+                                                      'user': config['POSTGRES']['USER'],
+                                                      'password': config['POSTGRES']['PASSWORD'],
+                                                      'host': config['POSTGRES']['HOST'],
+                                                      'port': config['POSTGRES']['PORT'],
+                                                      }
+                                                   )
 
     async def setup_mq(self):
         self.app['mq'] = await connect_robust(self.rabbit_url, loop=self.loop)
@@ -105,16 +120,15 @@ class Consumer:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-q', nargs='?', const=True, dest='queue', default='logger.event.insert_funding')
-    args = parser.parse_args()
+    queues = [config['QUEUES'][y] for y in config['QUEUES']]
+    for queue in queues:
+        loop = asyncio.get_event_loop()
+        workers = [Consumer(loop, queue=q).run() for q in queues]
 
-    loop = asyncio.get_event_loop()
+        # Run all workers concurrently
+        loop.run_until_complete(asyncio.gather(*workers))
 
-    worker = Consumer(loop, queue=args.queue.strip())
-    loop.run_until_complete(worker.run())
-
-    try:
-        loop.run_forever()
-    finally:
-        loop.close()
+        try:
+            loop.run_forever()
+        finally:
+            loop.close()
