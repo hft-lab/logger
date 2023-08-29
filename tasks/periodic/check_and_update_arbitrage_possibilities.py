@@ -4,10 +4,11 @@ import time
 from logging.config import dictConfig
 from tasks.event.send_to_telegram import Telegram
 
-from config import Config
-
-
-dictConfig(Config.LOGGING)
+dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
+                'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
+            'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
+                'stream': 'ext://sys.stdout'}},
+            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
