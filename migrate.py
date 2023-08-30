@@ -2,6 +2,7 @@ from migrations.database import Database
 from migrations.migration import Migration
 import configparser
 import sys
+import os
 config = configparser.ConfigParser()
 config.read(sys.argv[1], "utf-8")
 
