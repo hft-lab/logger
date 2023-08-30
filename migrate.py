@@ -9,7 +9,7 @@ config.read(sys.argv[1], "utf-8")
 
 def main(checking=True):
     """ Migration run. """
-    path = os.path.join('/migrations', 'versions')
+    path = '/home/ubuntu/logger/migrations/versions'
     db = Database(conf={'database': config['POSTGRES']['NAME'],
                         'user': config['POSTGRES']['USER'],
                         'password': config['POSTGRES']['PASSWORD'],
