@@ -18,6 +18,7 @@ class UpdateOrders:
 
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
+        # logger.info(f"UPDATE ORDERS GOT PAYLOAD:\n{payload}")
         async with self.app['db'].acquire() as cursor:
             await self.__update(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")

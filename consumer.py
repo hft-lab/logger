@@ -81,9 +81,10 @@ class Consumer:
         logger.info(f"Queue: {self.queue}")
         logger.info(f"Exist queue: {self.queue in TASKS}")
 
-        if self.queue and self.queue in TASKS:
-            logger.info("Single work option")
-            self.periodic_tasks.append(self.loop.create_task(self._consume(self.app['mq'], self.queue)))
+        # if self.queue and self.queue in TASKS:
+        # logger.info("Single work option")
+        # self.periodic_tasks.append(self.loop.create_task(self._consume(self.app['mq'], self.queue)))
+        self.loop.create_task(self._consume(self.app['mq'], self.queue))
 
     async def setup_db(self) -> None:
         self.app['db'] = await asyncpg.create_pool(**{'database': config['POSTGRES']['NAME'],
@@ -98,13 +99,14 @@ class Consumer:
         self.app['mq'] = await connect_robust(self.rabbit_url, loop=self.loop)
 
     async def _consume(self, connection, queue_name) -> None:
+        print(f"RUN CONSUMER FOR {queue_name}")
         channel = await connection.channel()
 
         queue = await channel.declare_queue(queue_name, durable=True)
         await queue.consume(self.on_message)
 
     async def on_message(self, message) -> None:
-        logger.info(f"\n\nReceived message {message.routing_key}")
+        logger.info(f"\n\nReceived message\n{message.routing_key=}\n{message.body=}")
         try:
             if 'logger.periodic' in message.routing_key:
                 await message.ack()
@@ -121,14 +123,12 @@ class Consumer:
 
 if __name__ == '__main__':
     queues = [config['QUEUES'][y] for y in config['QUEUES']]
-    for queue in queues:
-        loop = asyncio.get_event_loop()
-        workers = [Consumer(loop, queue=q).run() for q in queues]
+    loop = asyncio.get_event_loop()
+    workers = [Consumer(loop, queue=q).run() for q in queues]
+    # Run all workers concurrently
+    loop.run_until_complete(asyncio.gather(*workers))
 
-        # Run all workers concurrently
-        loop.run_until_complete(asyncio.gather(*workers))
-
-        try:
-            loop.run_forever()
-        finally:
-            loop.close()
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()
