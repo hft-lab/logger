@@ -54,6 +54,7 @@ class InsertToDisbalance:
                 position_coin,
                 position_usd,
                 price,
+                threshold,
                 status
                 )
             values(
@@ -64,6 +65,7 @@ class InsertToDisbalance:
                 {data['position_coin']},
                 {data['position_usd']},
                 {data['price']},
+                {data['threshold']},
                 '{data['status']}'
                 )         
             """

@@ -16,7 +16,6 @@ class CheckOrders:
     EXCHANGE_NAME = 'logger.event'
     QUEUE_NAME = 'logger.event.get_orders_results'
 
-
     def __init__(self, app):
         self.app = app
         self.worker_name = 'CHECK_ORDERS'

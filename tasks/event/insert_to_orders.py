@@ -49,8 +49,9 @@ class InsertToOrders:
         logger.info(f"Start: {self.worker_name}")
         # logger.info(f"INSERT TO ORDERS GOT PAYLOAD:\n{payload}")
         async with self.app['db'].acquire() as cursor:
-            if not await self.__select(payload, cursor):
-                await self.__insert(payload, cursor)
+            # if not data['exchange_order_id'] == 'default':
+            #     if not await self.__select(payload, cursor):
+            await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
 
 
@@ -126,3 +127,4 @@ class InsertToOrders:
                 )         
             """
         await cursor.execute(sql)
+
