@@ -156,6 +156,7 @@ class CheckAndUpdateArbitragePossibilities:
 
             message = f"TAKER ORDER EXECUTED\n"
             message += f"{sell_order['exchange']}- | {buy_order['exchange']}+\n"
+            message += f"MARKETS: {sell_order['symbol']}- | {buy_order['symbol']}+\n"
             message += f"ENV: {sell_order['env']}\n"
             message += f"DEAL STATUS: {status}\n"
             message += f"DEAL TIME: {str(buy_order['datetime']).split('.')[0]}\n"
