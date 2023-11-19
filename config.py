@@ -1,8 +1,8 @@
-import os
+import configparser
+import sys
+config = configparser.ConfigParser()
+config.read(sys.argv[1], "utf-8")
 
-from dotenv import load_dotenv
-
-load_dotenv()
 
 SECOND = 1
 MINUTE = 60
@@ -14,21 +14,24 @@ class Config:
     """
     Config class
     """
-
+    setts = config['POSTGRES']
     POSTGRES = {
-        'database': os.getenv('POSTGRES_NAME'),
-        'user': os.getenv('POSTGRES_USER'),
-        'password': os.getenv('POSTGRES_PASSWORD'),
-        'host': os.getenv('POSTGRES_HOST'),
-        'port': os.getenv('POSTGRES_PORT'),
+        'database': setts['NAME'],
+        'user': setts['USER'],
+        'password': setts['PASSWORD'],
+        'host': setts['HOST'],
+        'port': setts['PORT'],
     }
 
+    setts = config['RABBIT']
     RABBIT = {
-        'host': os.getenv('RABBIT_MQ_HOST'),
-        'port': int(os.getenv('RABBIT_MQ_PORT')),
-        'username': os.getenv('RABBIT_MQ_USER'),
-        'password': os.getenv('RABBIT_MQ_PASSWORD')
+        'host': setts['HOST'],
+        'port': int(setts['PORT']),
+        'username': setts['USERNAME'],
+        'password': setts['PASSWORD']
     }
+
+    RABBIT_URL = f"amqp://{RABBIT['username']}:{RABBIT['password']}@{RABBIT['host']}:{RABBIT['port']}/"
 
     PERIODIC_TASKS = [
         {
@@ -54,6 +57,18 @@ class Config:
             'interval': SECOND * 5,
             'delay': SECOND * 5,
             'payload': {}
+        },
+        {
+            'exchange': 'logger.event',
+            'queue': 'logger.event.send_to_telegram',
+            'routing_key': 'logger.event.send_to_telegram',
+            'interval': SECOND * 10,
+            'delay': SECOND,
+            'payload': {
+                "chat_id": -4073293077,
+                "msg": "Hi from Dima",
+                'bot_token': '6684267405:AAFf2z4yVXtW-afd3kM7vAfNkNipCJBAZbw'
+            }
         }
     ]
 

@@ -59,7 +59,7 @@ TASKS = {
 
 class Consumer:
     """
-    Producer get periodic and events tasks from RabbitMQ
+    Consumer gets periodic and events tasks from RabbitMQ
     """
 
     def __init__(self, loop, queue=None):
@@ -72,7 +72,7 @@ class Consumer:
 
     async def run(self) -> None:
         """
-        Init setup db connection and star tasks from queue
+        Init setup db connection and start getting tasks from queue
         :return: None
         """
         await self.setup_db()
