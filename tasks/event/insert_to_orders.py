@@ -49,7 +49,7 @@ class InsertToOrders:
         logger.info(f"Start: {self.worker_name}")
         # logger.info(f"INSERT TO ORDERS GOT PAYLOAD:\n{payload}")
         async with self.app['db'].acquire() as cursor:
-            # if not data['exchange_order_id'] == 'default':
+            # if not payload['exchange_order_id'] == 'default':
             #     if not await self.__select(payload, cursor):
             await self.__insert(payload, cursor)
         logger.info(f"Finish: {self.worker_name}")
@@ -73,7 +73,7 @@ class InsertToOrders:
     @staticmethod
     async def __insert(data: dict, cursor) -> None:
         """
-        Insert data to balancing_reports table
+        Insert data to orders table
         :param data: dict with NOT NULL keys
         :param cursor: asyncpg cursor
         :return: None
