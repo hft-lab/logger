@@ -8,5 +8,5 @@ __pycache__
 migrations/Log.migrations
 /Log.migrations
 migrations/tests/Log.migrations
-telegram_for_debug.py
+telegram.py
 debug.py
