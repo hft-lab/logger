@@ -64,18 +64,6 @@ PERIODIC_TASKS = [
         'interval': SECOND * 5,
         'delay': SECOND * 5,
         'payload': {}
-    },
-    {
-        'exchange': 'logger.periodic',
-        'queue': 'logger.periodic.send_to_telegram',
-        'routing_key': 'logger.periodic.send_to_telegram',
-        'interval': SECOND * 10,
-        'delay': SECOND,
-        'payload': {
-            "chat_id": -4073293077,
-            "msg": "Best Hi!",
-            'bot_token': '6684267405:AAFf2z4yVXtW-afd3kM7vAfNkNipCJBAZbw'
-        }
     }
 ]
 
