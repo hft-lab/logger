@@ -29,6 +29,7 @@ dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
             'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
+
 class Consumer:
     """
     Consumer gets periodic and events tasks from RabbitMQ
@@ -40,7 +41,6 @@ class Consumer:
         self.queue = queue
         self.rabbit_url = RABBIT_URL
         self.postgres = POSTGRES
-
 
     async def run(self) -> None:
         """
@@ -54,7 +54,6 @@ class Consumer:
         logger.info(f"Exist queue: {self.queue in QUEUES_TASKS}")
 
         self.loop.create_task(self._consume(self.app['mq'], self.queue))
-
 
     async def _consume(self, connection, queue_name) -> None:
         print(f"RUN CONSUMER FOR {queue_name}")

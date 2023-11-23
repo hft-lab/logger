@@ -15,7 +15,7 @@ def main(checking=True):
                         'host': config['POSTGRES']['HOST'],
                         'port': config['POSTGRES']['PORT'],
                         }).connect()
-
+    print('DB CONNECTED')
     migration = Migration(path=path, db=db)
     migrations = migration.get_migrations(checking=checking)
 

@@ -3,7 +3,6 @@ import logging
 import orjson
 from aio_pika import connect, ExchangeType, Message
 
-from telegram import Telegram
 from tasks.all_tasks import PERIODIC_TASKS
 import configparser
 import sys
@@ -23,7 +22,6 @@ class WorkerProducer:
         self.loop = loop
         self.rabbit_url = RABBIT_URL
         self.periodic_tasks = []
-        self.telegram = Telegram()
 
     async def run(self):
         for task in periodic_tasks:
