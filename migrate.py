@@ -1,11 +1,13 @@
 from migrations.database import Database
 from migrations.migration import Migration
 import configparser
-import sys
+from core.wrappers import try_exc_regular
+
 config = configparser.ConfigParser()
-config.read(sys.argv[1], "utf-8")
+config.read('config.ini', "utf-8")
 
 
+@try_exc_regular
 def main(checking=True):
     """ Migration run. """
     path = '/home/ubuntu/logger/migrations/versions'

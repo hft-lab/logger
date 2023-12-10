@@ -2,6 +2,7 @@ import asyncio
 import logging
 import traceback
 from logging.config import dictConfig
+from core.wrappers import try_exc_async
 
 import asyncpg
 import orjson
@@ -13,7 +14,7 @@ from tasks.all_tasks import QUEUES_TASKS
 import configparser
 import sys
 config = configparser.ConfigParser()
-config.read(sys.argv[1], "utf-8")
+config.read('config.ini', "utf-8")
 
 setts = config['RABBIT']
 RABBIT_URL = f"amqp://{setts['USERNAME']}:{setts['PASSWORD']}@{setts['HOST']}:{setts['PORT']}/"
@@ -26,7 +27,7 @@ dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
                 'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
             'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
                 'stream': 'ext://sys.stdout'}},
-            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
+            'loggers': {'': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
@@ -42,6 +43,7 @@ class Consumer:
         self.rabbit_url = RABBIT_URL
         self.postgres = POSTGRES
 
+    @try_exc_async
     async def run(self) -> None:
         """
         Init setup db connection and start getting tasks from queue
@@ -55,26 +57,22 @@ class Consumer:
 
         self.loop.create_task(self._consume(self.app['mq'], self.queue))
 
+    @try_exc_async
     async def _consume(self, connection, queue_name) -> None:
         print(f"RUN CONSUMER FOR {queue_name}")
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name, durable=True)
         await queue.consume(self.on_message)
 
+    @try_exc_async
     async def on_message(self, message) -> None:
         logger.info(f"\n\nReceived message\n{message.routing_key=}\n{message.body=}")
-        try:
-            if any(keyword in message.routing_key for keyword in ['logger.periodic', 'logger.event']):
-                await message.ack()
-            # TBD. Принтануть message в telegram, чтобы посмотреть формат
-            task = QUEUES_TASKS.get(message.routing_key)(self.app)
-            await task.run(orjson.loads(message.body))
-            logger.info(f"Success task {message.routing_key}")
-
-        except Exception as e:
-            logger.info(f"Error {e} while serving task {message.routing_key}")
-            traceback.print_exc()
+        if any(keyword in message.routing_key for keyword in ['logger.periodic', 'logger.event']):
             await message.ack()
+        # TBD. Принтануть message в telegram, чтобы посмотреть формат
+        task = QUEUES_TASKS.get(message.routing_key)(self.app)
+        await task.run(orjson.loads(message.body))
+        logger.info(f"Success task {message.routing_key}")
 
 
 if __name__ == '__main__':

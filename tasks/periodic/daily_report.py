@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from core.wrappers import try_exc_async
 
 
 class DailyReport:
@@ -9,9 +10,11 @@ class DailyReport:
         self.start_balances = {}
         self.end_balances = {}
 
+    @try_exc_async
     async def __get_active_exchanes(self):
         pass
 
+    @try_exc_async
     async def __send_overall_summary(self):
         delimiter = '_______________________________________\n'
         total_start_balance = 0.0

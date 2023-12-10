@@ -1,12 +1,12 @@
 import asyncio
 import orjson
+from core.wrappers import try_exc_async
 
 import aiohttp
 
 import configparser
-import sys
 config = configparser.ConfigParser()
-config.read(sys.argv[1], "utf-8")
+config.read('config.ini', "utf-8")
 
 
 class Telegram:
@@ -15,6 +15,7 @@ class Telegram:
         self.telegram_api_url = 'https://api.telegram.org/bot{}/sendMessage'
         self.headers = {'Content-Type': 'application/json'}
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         message = {
             'chat_id': payload['chat_id'],

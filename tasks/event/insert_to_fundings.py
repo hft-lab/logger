@@ -1,4 +1,6 @@
 import logging
+from core.wrappers import try_exc_async
+
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +14,7 @@ class InsertFunding:
         self.app = app
         self.worker_name = 'INSERT_TO_CHECK_FUNDING'
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         """
         Get cursor and start insert func
@@ -37,6 +40,7 @@ class InsertFunding:
         logger.info(f"Finish: {self.worker_name}")
 
     @staticmethod
+    @try_exc_async
     async def __select(payload, cursor):
         sql = f"""
         SELECT
@@ -51,6 +55,7 @@ class InsertFunding:
         return await cursor.fetchrow(sql)
 
     @staticmethod
+    @try_exc_async
     async def __insert(data: dict, cursor) -> None:
         """
         Insert data to balancing_reports table

@@ -2,12 +2,14 @@ import logging
 from logging.config import dictConfig
 
 from core.rabbit_mq import publish_message
+from core.wrappers import try_exc_async
+
 
 dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
                 'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
             'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
                 'stream': 'ext://sys.stdout'}},
-            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
+            'loggers': {'': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
@@ -20,12 +22,14 @@ class CheckOrders:
         self.app = app
         self.worker_name = 'CHECK_ORDERS'
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
         async with self.app['db'].acquire() as cursor:
             await self.__get_and_send_orders_by_exchange_name(cursor)
         logger.info(f"Finish: {self.worker_name}")
 
+    @try_exc_async
     async def __get_and_send_orders_by_exchange_name(self, cursor):
         sql = f"""
         select 

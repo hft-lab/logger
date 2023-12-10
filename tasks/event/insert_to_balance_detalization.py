@@ -1,11 +1,13 @@
 import logging
 from logging.config import dictConfig
+from core.wrappers import try_exc_async
+
 
 dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
                 'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
             'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
                 'stream': 'ext://sys.stdout'}},
-            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
+            'loggers': {'': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
@@ -18,6 +20,7 @@ class InsertToBalanceDetalization:
         self.app = app
         self.worker_name = 'INSERT_TO_BALANCE_DETALIZATION'
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         """
         Get cursor and start insert func
@@ -44,6 +47,7 @@ class InsertToBalanceDetalization:
         logger.info(f"Finish: {self.worker_name}")
 
     @staticmethod
+    @try_exc_async
     async def __insert(data: dict, cursor) -> None:
         """
         Insert data to balancing_reports table

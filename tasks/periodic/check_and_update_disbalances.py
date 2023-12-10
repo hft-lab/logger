@@ -2,12 +2,13 @@ import datetime
 import logging
 import time
 from logging.config import dictConfig
+from core.wrappers import try_exc_async
 
 dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
                 'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
             'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
                 'stream': 'ext://sys.stdout'}},
-            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
+            'loggers': {'': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
@@ -33,6 +34,7 @@ class CheckAndUpdateDisbalances:
         self.all_disbalances = []
         self.disbalances_to_update = []
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
 
@@ -43,6 +45,7 @@ class CheckAndUpdateDisbalances:
 
         logger.info(f"Finish: {self.worker_name}")
 
+    @try_exc_async
     async def __get_all_processing_arbitrage_possibilities_ids(self, cursor):
         sql = """
         select 
@@ -57,6 +60,7 @@ class CheckAndUpdateDisbalances:
 
         self.all_disbalances = [x['id'] for x in await cursor.fetch(sql)]
 
+    @try_exc_async
     async def __get_orders_by_parent_id(self, cursor):
         for parent_id in self.all_disbalances:
             sql = f"""
@@ -108,6 +112,7 @@ class CheckAndUpdateDisbalances:
                     }
                 )
 
+    @try_exc_async
     async def __update_arbitrage_possibilities(self, cursor):
         for data in self.disbalances_to_update:
             sql = f"""

@@ -3,12 +3,14 @@ import logging
 import time
 from logging.config import dictConfig
 from tasks.event.send_to_telegram import Telegram
+from core.wrappers import try_exc_async
+
 
 dictConfig({'version': 1, 'disable_existing_loggers': False, 'formatters': {
                 'simple': {'format': '[%(asctime)s][%(threadName)s] %(funcName)s: %(message)s'}},
             'handlers': {'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'simple',
                 'stream': 'ext://sys.stdout'}},
-            'loggers': {'': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}}})
+            'loggers': {'': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}}})
 logger = logging.getLogger(__name__)
 
 
@@ -35,6 +37,7 @@ class CheckAndUpdateArbitragePossibilities:
         self.arbitrage_possibilities_to_update = []
         self.telegram = Telegram(app)
 
+    @try_exc_async
     async def run(self, payload: dict) -> None:
         logger.info(f"Start: {self.worker_name}")
 
@@ -45,6 +48,7 @@ class CheckAndUpdateArbitragePossibilities:
 
         logger.info(f"Finish: {self.worker_name}")
 
+    @try_exc_async
     async def __get_all_processing_arbitrage_possibilities_ids(self, cursor):
         sql = """
         select 
@@ -59,6 +63,7 @@ class CheckAndUpdateArbitragePossibilities:
 
         self.all_arbitrage_possibilities = await cursor.fetch(sql)
 
+    @try_exc_async
     async def __get_orders_by_parent_id(self, cursor):
         for possibility in self.all_arbitrage_possibilities:
             parent_id = possibility["id"]
@@ -117,6 +122,7 @@ class CheckAndUpdateArbitragePossibilities:
                     }
                 )
 
+    @try_exc_async
     async def __update_arbitrage_possibilities(self, cursor):
         for data in self.arbitrage_possibilities_to_update:
             sql = f"""
@@ -133,6 +139,7 @@ class CheckAndUpdateArbitragePossibilities:
             await cursor.execute(sql)
             await self.prepare_and_send_message_to_tg(data['orders'], data['possibility'])
 
+    @try_exc_async
     async def prepare_and_send_message_to_tg(self, data, possibility):
         if len(data) == 2:
             sell_order = [x for x in data if x['side'] == 'sell'][0]

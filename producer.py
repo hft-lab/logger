@@ -2,6 +2,7 @@ import asyncio
 import logging
 import orjson
 from aio_pika import connect, ExchangeType, Message
+from core.wrappers import try_exc_async
 
 from tasks.all_tasks import PERIODIC_TASKS
 import configparser
@@ -23,10 +24,12 @@ class WorkerProducer:
         self.rabbit_url = RABBIT_URL
         self.periodic_tasks = []
 
+    @try_exc_async
     async def run(self):
         for task in periodic_tasks:
             self.periodic_tasks.append(self.loop.create_task(self._publishing_task(task)))
 
+    @try_exc_async
     async def _publishing_task(self, task):
         await asyncio.sleep(task.get('delay', 0))
 
