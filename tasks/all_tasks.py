@@ -53,7 +53,7 @@ PERIODIC_TASKS = [
         'exchange': 'logger.periodic',
         'queue': 'logger.periodic.check_and_update_arbitrage_possibilities',
         'routing_key': 'logger.periodic.check_and_update_arbitrage_possibilities',
-        'interval': SECOND * 5,
+        'interval': SECOND * 30,
         'delay': SECOND * 5,
         'payload': {}
     },
@@ -61,7 +61,7 @@ PERIODIC_TASKS = [
         'exchange': 'logger.periodic',
         'queue': 'logger.periodic.check_and_update_disbalances',
         'routing_key': 'logger.periodic.check_and_update_disbalances',
-        'interval': SECOND * 5,
+        'interval': MINUTE * 3,
         'delay': SECOND * 5,
         'payload': {}
     }
