@@ -45,16 +45,16 @@ PERIODIC_TASKS = [
         'exchange': 'logger.periodic',
         'queue': 'logger.periodic.check_orders',
         'routing_key': 'logger.periodic.check_orders',
-        'interval': MINUTE,
-        'delay': SECOND * 30,
+        'interval': SECOND * 28,
+        'delay': SECOND * 25,
         'payload': {}
     },
     {
         'exchange': 'logger.periodic',
         'queue': 'logger.periodic.check_and_update_arbitrage_possibilities',
         'routing_key': 'logger.periodic.check_and_update_arbitrage_possibilities',
-        'interval': SECOND * 30,
-        'delay': SECOND * 5,
+        'interval': SECOND * 29,
+        'delay': SECOND * 30,
         'payload': {}
     },
     {
@@ -62,7 +62,7 @@ PERIODIC_TASKS = [
         'queue': 'logger.periodic.check_and_update_disbalances',
         'routing_key': 'logger.periodic.check_and_update_disbalances',
         'interval': MINUTE * 3,
-        'delay': SECOND * 5,
+        'delay': SECOND * 35,
         'payload': {}
     }
 ]
