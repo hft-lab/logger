@@ -19,7 +19,7 @@ class Telegram:
     async def run(self, payload: dict) -> None:
         message = {
             'chat_id': payload['chat_id'],
-            'text': '<pre>' + payload['msg'] + '</pre>',
+            'text': '<pre>' + str(payload['msg']) + '</pre>',
             'parse_mode': 'HTML'
         }
 
